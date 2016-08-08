@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Muehle.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Muehle&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">Muehle.java</span></div><h1>Muehle.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 by Kai Braunias
+ * 
+ */
+package game;
+
+/**
+ *
+ * @author Kai
+ */
+public class Muehle implements Runnable {
+
+    /**
+     * class Muehle describes the Game and all interactions with it
+     * Every instance initializes its own Board instance, its own Stones instance and its own MoveValidator
+     * Two IPlayerHandler (white &amp; black) need to be assigned via setPlayer(1,IPlayerHandler) and setPlayer(2,IPlayerHandler)
+     */
+    private int step;
+    private IPlayerHandler whitePlayer;
+    private IPlayerHandler blackPlayer;
+    private IPlayerHandler activePlayer;
+    private boolean second_move;
+    private final Board board;
+    private final Stones stones;
+    private MoveValidator moveValidator;
+    private Move current_move;
+    private boolean manual_stop;
+    
+<span class="fc" id="L29">    public Muehle() {</span>
+<span class="fc" id="L30">        System.out.println(&quot;Game initialized&quot;);</span>
+<span class="fc" id="L31">        this.board = new Board();</span>
+<span class="fc" id="L32">        System.out.println(&quot;create stones&quot;);</span>
+<span class="fc" id="L33">        this.stones = new Stones(board);</span>
+<span class="fc" id="L34">        this.current_move = null;</span>
+<span class="fc" id="L35">        this.manual_stop = false;</span>
+<span class="fc" id="L36">    }</span>
+
+
+    /**
+     *
+     * @return current GameStep
+     */
+    public int getStep() {
+<span class="fc" id="L44">        return step;</span>
+    }
+
+    /**
+     *
+     * is used to change the activePlayer
+     */
+    public void changeGameState() {
+<span class="fc" id="L52">        this.step++;</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if(step%2==0){</span>
+<span class="fc" id="L54">            this.activePlayer= whitePlayer;</span>
+        }else{
+<span class="fc" id="L56">            this.activePlayer= blackPlayer;</span>
+        }
+<span class="fc" id="L58">    }</span>
+    
+    /**
+     * start main game flow
+     */
+    public void startGame(){
+        // initialize game
+        // check if all players are ready
+<span class="fc" id="L66">        System.out.println(&quot;Waiting for players&quot;);</span>
+<span class="pc bpc" id="L67" title="2 of 4 branches missed.">        while (this.blackPlayer == null || this.whitePlayer == null){</span>
+                // players are still missing
+<span class="nc" id="L69">                try {Thread.sleep(1000);} catch (InterruptedException e) {}</span>
+        }
+        //initialize moveValidator
+<span class="fc" id="L72">        this.moveValidator = new MoveValidator(this);</span>
+        //initialize starting player to whitePlayer
+<span class="fc" id="L74">        this.activePlayer = whitePlayer;</span>
+        // create stones
+        //initialize second_move to false
+        //this var is used to determine if a user has to defeat an enemy stone
+<span class="fc" id="L78">        this.second_move = false;</span>
+        //initialize gamestep to 0
+<span class="fc" id="L80">        this.step =0;</span>
+<span class="fc" id="L81">        System.out.println(&quot;starting game&quot;);</span>
+
+
+<span class="pc bpc" id="L84" title="3 of 6 branches missed.">        while((!isGameEndConditionReached())&amp;(!manual_stop)){</span>
+<span class="nc" id="L85">                waitForMove();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                if(second_move){</span>
+<span class="nc" id="L87">                    waitForMove();</span>
+                }
+<span class="nc" id="L89">                this.second_move = false;</span>
+<span class="nc" id="L90">                changeGameState();</span>
+        }
+        
+        //Game End
+<span class="fc" id="L94">        System.out.println(&quot;Game end&quot;);</span>
+        
+<span class="fc" id="L96">    }</span>
+    private void waitForMove(){
+<span class="fc" id="L98">        current_move = null;</span>
+        
+        //wait for a valid move
+        do{
+<span class="fc" id="L102">                current_move = this.activePlayer.getMove();</span>
+<span class="pc" id="L103">                try {Thread.sleep(100);} catch (InterruptedException e) {}</span>
+<span class="pc bpc" id="L104" title="2 of 4 branches missed.">                if( current_move != null &amp;&amp; this.moveValidator.isValidMove(current_move) ){</span>
+<span class="fc" id="L105">                        break;</span>
+<span class="nc bnc" id="L106" title="All 4 branches missed.">                }else if( current_move != null &amp;&amp; !this.moveValidator.isValidMove(current_move)){</span>
+<span class="nc" id="L107">                        System.out.println(&quot;provided move was invalid: &quot;+current_move);</span>
+<span class="nc" id="L108">                        System.exit(0);</span>
+                }
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        }while(current_move == null);</span>
+        
+        //make the move
+<span class="fc" id="L113">        this.moveStone(current_move);</span>
+<span class="fc" id="L114">    }</span>
+    /**
+     * check if the games end condition is met: one player has 9 defeated_stones
+     * 
+     * @return true if the game end condition is met
+     */
+    private boolean isGameEndConditionReached() {
+<span class="pc bpc" id="L121" title="2 of 4 branches missed.">            return (stones.getSize_defeated_stones(1)==9)|(stones.getSize_defeated_stones(2)==9);</span>
+    }
+
+    public IPlayerHandler getWhitePlayer() {
+<span class="fc" id="L125">        return whitePlayer;</span>
+    }
+
+    public IPlayerHandler getBlackPlayer() {
+<span class="fc" id="L129">        return blackPlayer;</span>
+    }
+
+    public void setPlayer(int color,IPlayerHandler player) {
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if(color==1){</span>
+<span class="fc" id="L134">            this.whitePlayer = player;</span>
+        }else{
+<span class="fc" id="L136">            this.blackPlayer = player;           </span>
+        }
+<span class="fc" id="L138">    }</span>
+
+    /**
+     *
+     * @return the current board
+     */
+    public Board getBoard() {
+<span class="fc" id="L145">        return this.board;</span>
+    }
+
+    /**
+     *
+     * @return boolean second_move
+     * which indicates if a player has to make a second move (defeat enemy stone)
+     * to proceed
+     */
+    public boolean isSecond_move() {
+<span class="fc" id="L155">        return second_move;</span>
+    }
+
+    /**
+     *
+     * @return Object with all Stones
+     */
+    public Stones getStones() {
+<span class="fc" id="L163">        return stones;</span>
+    }
+
+    /**
+     *
+     * @return the current MoveValidator
+     */
+    public MoveValidator getMoveValidator() {
+<span class="fc" id="L171">        return moveValidator;</span>
+    }
+
+    /**
+     *
+     * @return the current active player
+     */
+    public IPlayerHandler getActivePlayer() {
+<span class="fc" id="L179">        return activePlayer;</span>
+    }
+    
+    
+
+    @Override
+    public void run() {
+<span class="nc" id="L186">        this.startGame();</span>
+<span class="nc" id="L187">    }</span>
+
+    private void moveStone(Move move) {
+<span class="fc" id="L190">        Stone stone = move.stone;</span>
+<span class="fc" id="L191">        Cell target = move.target;</span>
+<span class="fc" id="L192">        Cell old_cell = stone.getPos();</span>
+        //check if stone is already on the board or is set new
+        //if old_cell == null stone is set new
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if(old_cell==null){</span>
+<span class="fc" id="L196">            stones.set_stone(stone);</span>
+        }else{
+            //set old cell to free
+<span class="nc" id="L199">            old_cell.setStoneColor(0);    </span>
+        }
+        //check if stone is defeated or moved to a new position
+        //if target == null stone is defeated
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">        if(target==null){</span>
+<span class="nc" id="L204">            stones.defeat_stone(stone);</span>
+        }else{
+            //move stone to target cell
+<span class="fc" id="L207">            stone.setPos(target);    </span>
+        }
+        //check if stone creates a muehle
+        //if yes, set second_move to true in order
+        //to allow the user to defeat an enemy stone
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        if(stones.checkIfStonePartOfMuehle(stone)){</span>
+<span class="nc" id="L213">            this.second_move = true;</span>
+        }
+<span class="fc" id="L215">    }</span>
+    /**
+     * stops the game
+     */
+    public void stopGame(){
+<span class="fc" id="L220">        this.manual_stop = true;</span>
+<span class="fc" id="L221">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

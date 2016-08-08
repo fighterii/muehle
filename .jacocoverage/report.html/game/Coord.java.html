@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Coord.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Muehle&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">Coord.java</span></div><h1>Coord.java</h1><pre class="source lang-java linenums">package game;
+
+/**
+ *
+ * @author Kai
+ */
+public class Coord {
+    /**
+     * represents the Coordination of an object on the board, relative to its circle
+     */
+    private int x;
+    private int y;
+
+    
+<span class="fc" id="L15">    public Coord(int x, int y) {</span>
+            // x is the column coordinate,
+            // y is the row coordinate
+<span class="fc" id="L18">            this.x = x;</span>
+<span class="fc" id="L19">            this.y = y;</span>
+<span class="fc" id="L20">    }</span>
+
+    /** 
+     * Checks if the position is part of the circle 
+     * 1 1 1 0
+     * 1 0 1 0
+     * 1 1 1 0
+     * 0 0 0 0
+     * 1 = valid
+     * @return true if position is valid
+     */
+    public boolean isValidPos() {
+<span class="fc bfc" id="L32" title="All 4 branches covered.">        if ((x==1)&amp;&amp;(y==1)){</span>
+<span class="fc" id="L33">            return false;</span>
+<span class="fc bfc" id="L34" title="All 10 branches covered.">        }else return !((x&lt;0)|(y&lt;0)|(x&gt;2)|(y&gt;2));</span>
+    }
+    
+   
+    /**
+     * @return the x
+     */
+    public int getX() {
+<span class="fc" id="L42">            return x;</span>
+    }
+
+    /**
+     * @param x the x to set
+     */
+    public void setX(int x) {
+<span class="nc" id="L49">            this.x = x;</span>
+<span class="nc" id="L50">    }</span>
+
+    /**
+     * @return the y
+     */
+    public int getY() {
+<span class="fc" id="L56">            return y;</span>
+    }
+
+    /**
+     * @param y the y to set
+     */
+    public void setY(int y) {
+<span class="nc" id="L63">            this.y = y;</span>
+<span class="nc" id="L64">    }    </span>
+
+    /**
+     * this new equals methods makes sure, that only the x and y coordinates of 
+     * a Coord obj matter (and not the two Coord obj have to be the same obj)
+     * @param obj Coord to compare for equality
+     * @return true if obj are equal (they have the same coord);
+     */
+    @Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">		if (this == obj)</span>
+<span class="fc" id="L75">			return true;</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L77">			return false;</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L79">			return false;</span>
+<span class="fc" id="L80">		Coord other = (Coord) obj;</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">		if (x != other.x)</span>
+<span class="nc" id="L82">			return false;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">		if (y != other.y)</span>
+<span class="fc" id="L84">			return false;</span>
+<span class="fc" id="L85">		return true;</span>
+	}
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L90">        int hash = 3;</span>
+<span class="nc" id="L91">        hash = 47 * hash + this.x;</span>
+<span class="nc" id="L92">        hash = 47 * hash + this.y;</span>
+<span class="nc" id="L93">        return hash;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L98">        return &quot;Coord{&quot; + &quot;x=&quot; + x + &quot;, y=&quot; + y + '}';</span>
+    }
+        
+        
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

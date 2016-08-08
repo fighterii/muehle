@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Stone.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Muehle&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">Stone.java</span></div><h1>Stone.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 by Kai Braunias
+ * 
+ */
+package game;
+
+/**
+ *
+ * @author Kai
+ */
+public class Stone {
+    /**
+     * An Instance of this Class represents a single Stone obj of the game
+     * it is either white (color=1) or black(color=2)
+     * and holds information about its position on the board
+     * (null indicates not on the board, either defeated or notset yet)
+     */
+    private Cell pos;
+    private final int color;
+
+    /**
+     * Constructor for a Stone Object
+     * 
+     * @param color: 1 - white; 2 - black
+     */
+<span class="fc" id="L26">    public Stone(int color){</span>
+<span class="pc bpc" id="L27" title="1 of 6 branches missed.">        if((color!=1) | (color!=2)){</span>
+<span class="fc" id="L28">            this.color = color;           </span>
+        }else{
+<span class="nc" id="L30">            throw new IllegalArgumentException(&quot;Stone must be assigned to player white(1) or player black(2)&quot;);</span>
+        }
+<span class="fc" id="L32">        this.pos = null;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     *
+     * @return current position of the stone
+     */
+    public Cell getPos() {
+<span class="fc" id="L40">        return pos;</span>
+    }
+
+    /**
+     *
+     * @return color of the stone
+     * 1: white
+     * 2: black
+     */
+    public int getColor() {
+<span class="fc" id="L50">        return color;</span>
+    }
+
+    /**
+     * Set the position
+     * @param pos
+     * of the Stone
+     */
+    public void setPos(Cell pos) {
+<span class="fc" id="L59">        this.pos = pos;</span>
+        //if pos is a cell on board, the color is set to the pos
+        //if pos is null(defeated), no color is set
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if(pos!=null){</span>
+<span class="fc" id="L63">            pos.setStoneColor(color);    </span>
+        }
+<span class="fc" id="L65">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L69">        return &quot;Stone{&quot; + &quot;pos=&quot; + pos + &quot;, color=&quot; + color + '}';</span>
+    }
+    
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

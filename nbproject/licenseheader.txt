@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Copyright 2016 by Kai Braunias
+${licensePrefix}
+<#if licenseLast??>
+${licenseLast}
+</#if>
