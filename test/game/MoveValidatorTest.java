@@ -64,8 +64,8 @@ public class MoveValidatorTest {
         cell0 = allcells.get(0); 
         cell1 = allcells.get(1);
         cell2 = allcells.get(2);
-        w_stone1 = stones.getNext_notset_stones(1);
-        b_stone1 = stones.getNext_notset_stones(2);
+        w_stone1 = stones.getNextNotsetStone(1);
+        b_stone1 = stones.getNextNotsetStone(2);
         
     }
     

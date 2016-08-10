@@ -64,26 +64,32 @@ public class MoveValidator {
             
             //own stone?
             if(stone_color==player_color){
+                //check if target is specified
+                if(target!=null){
                 //target empty?
-                if(target.getStoneColor()==0){
-                    //source not empty?
-                    if(source != null){
-                        Cell[] neighbors = source.getNeighbors();
-                        //target in the neighborhood?
-                        if(cellArrayContainsCell(neighbors,target)){
-                            return true;
+                    if(target.getStoneColor()==0){
+                        //source not empty?
+                        if(source != null){
+                            Cell[] neighbors = source.getNeighbors();
+                            //target in the neighborhood?
+                            if(cellArrayContainsCell(neighbors,target)){
+                                return true;
+                            }else{
+                                System.out.println("Target field is not in the neighborhood of the current field");
+                            }                       
                         }else{
-                            System.out.println("Target field is not in the neighborhood of the current field");
-                        }                       
+                            //source empty, target empty, colors_match
+                            return true;
+                        }
+
                     }else{
-                        //source empty, target empty, colors_match
-                        return true;
+                        //Target field is not empty
+                        System.out.println("Target field is not empty!");
                     }
- 
                 }else{
-                    //Target field is not empty
-                    System.out.println("Target field is not empty!");
-                }
+                //target not specified, move is invalid
+                System.out.println("Target field is not specified!");
+                }            
             }else{
                 //stone_color & player_color don't match
                 System.out.println("You can only move your own stones!");

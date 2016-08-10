@@ -4,6 +4,7 @@
  */
 package game;
 
+import gui.Console;
 import gui.JGame;
 
 /**
@@ -17,12 +18,13 @@ public class Main {
         Muehle muehleGame = new Muehle();
 
         // then we create the clients/players
-        JGame muehleGui = new JGame(muehleGame);
+        //JGame muehleGui = new JGame(muehleGame);
+        Console consoleGui = new Console(muehleGame);
         
-        SimpleAiPlayerHandler ai1 = new SimpleAiPlayerHandler(muehleGame);
+        RandomAiPlayer ai1 = new RandomAiPlayer(muehleGame);
 
         // then we attach the clients/players to the game
-        muehleGame.setPlayer(1, muehleGui);
+        muehleGame.setPlayer(1, consoleGui);
         muehleGame.setPlayer(2, ai1);
 
         // in the end we start the game

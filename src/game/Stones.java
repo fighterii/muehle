@@ -17,42 +17,46 @@ public class Stones {
      * it initializes 9 stones for each of the two player colors white&black
      * and keeps track about the status of each Stone
      */
-    private ArrayList<Stone> w_stones;
-    private ArrayList<Stone> w_set_stones;
-    private ArrayList<Stone> w_notset_stones;
-    private ArrayList<Stone> w_defeated_stones;
-    private ArrayList<Stone> w_protected_stones;
-    private ArrayList<Stone> b_stones;
-    private ArrayList<Stone> b_set_stones;
-    private ArrayList<Stone> b_notset_stones;
-    private ArrayList<Stone> b_defeated_stones;
-    private ArrayList<Stone> b_protected_stones;
-    private ArrayList<Cell[]> list_possible_muehle;
+    private ArrayList<Stone> wStones;
+    private ArrayList<Stone> wSetStones;
+    private ArrayList<Stone> wNotsetStones;
+    private ArrayList<Stone> wDefeatedStones;
+    private ArrayList<Stone> wProtectedStones;
+    private ArrayList<Stone> wNotProtectedStones;
+    private ArrayList<Stone> bStones;
+    private ArrayList<Stone> bSetStones;
+    private ArrayList<Stone> bNotsetStones;
+    private ArrayList<Stone> bDefeatedStones;
+    private ArrayList<Stone> bProtectedStones;
+    private ArrayList<Stone> bNotProtectedStones;
+    private ArrayList<Cell[]> listPossibleMuehle;
     
     public Stones(Board board){
         //Initialize all stones and lists for player white
         System.out.println("initialize lists for player white");
-        this.w_stones = new ArrayList<>();
+        this.wStones = new ArrayList<>();
             for(int i=0;i<9;i++){
-                w_stones.add(new Stone(1));
+                wStones.add(new Stone(1));
             }
-        this.w_set_stones = new ArrayList<>();
-        this.w_notset_stones = w_stones;
-        this.w_defeated_stones = new ArrayList<>();
-        this.w_protected_stones = new ArrayList<>();  
+        this.wSetStones = new ArrayList<>();
+        this.wNotsetStones = wStones;
+        this.wDefeatedStones = new ArrayList<>();
+        this.wProtectedStones = new ArrayList<>();  
+        this.wNotProtectedStones = new ArrayList<>();
         System.out.println("initialize lists for player black");
         //Initialize all stones and lists for player black
-        this.b_stones = new ArrayList<>();
+        this.bStones = new ArrayList<>();
         for(int i=0;i<9;i++){
-            b_stones.add(new Stone(2));
+            bStones.add(new Stone(2));
         }
-        this.b_set_stones = new ArrayList<>();
-        this.b_notset_stones = b_stones;      
-        this.b_defeated_stones = new ArrayList<>();
-        this.b_protected_stones = new ArrayList<>();  
+        this.bSetStones = new ArrayList<>();
+        this.bNotsetStones = bStones;      
+        this.bDefeatedStones = new ArrayList<>();
+        this.bProtectedStones = new ArrayList<>();  
+        this.bNotProtectedStones = new ArrayList<>();
         
         //get list with possible Muehle candidates
-        this.list_possible_muehle = board.getPossibleMuehle();
+        this.listPossibleMuehle = board.getPossibleMuehle();
         System.out.println("All stones initialized");
     }
 
@@ -61,12 +65,12 @@ public class Stones {
      * @param color to indicate from which player the next notset stone should be returned
      * @return next unset white stones
      */
-    public Stone getNext_notset_stones(int color) {
+    public Stone getNextNotsetStone(int color) {
         switch(color){
             case 1:
-                return w_notset_stones.get(0);
+                return wNotsetStones.get(0);
             case 2:
-                return b_notset_stones.get(0);
+                return bNotsetStones.get(0);
             default:
                 throw new IllegalArgumentException("Invalid color!");
         }
@@ -79,13 +83,13 @@ public class Stones {
      * @return the size of the list of defeated stones
      * size == 9 indicates the player has lost
      */
-    public int getSize_defeated_stones(int color){
+    public int getSizeDefeatedStones(int color){
         switch(color){
             case 1:
-                System.out.println(w_defeated_stones);
-                return w_defeated_stones.size();
+                System.out.println(wDefeatedStones);
+                return wDefeatedStones.size();
             case 2:
-                return b_defeated_stones.size();
+                return bDefeatedStones.size();
             default:
                 throw new IllegalArgumentException("Invalid color!");
         }
@@ -93,18 +97,21 @@ public class Stones {
     /**
      * Add to List of Stones on Board
      * @param stone is the stone which should be added to list of stones on board
-     * also delete from list of notset_stones
+     * also delete from list of notSetStones and add to list of notProtectedStones
      */
-    public void set_stone(Stone stone) {
+    public void setStone(Stone stone) {
        int color = stone.getColor();
+       //System.out.println("Setting stone "+stone+"");
        switch(color){
             case 1:
-                this.w_set_stones.add(stone);
-                this.w_notset_stones.remove(stone);
+                this.wSetStones.add(stone);
+                this.wNotsetStones.remove(stone);
+                this.wNotProtectedStones.add(stone);
                 break;
             case 2:
-                this.b_set_stones.add(stone);
-                this.b_notset_stones.remove(stone);
+                this.bSetStones.add(stone);
+                this.bNotsetStones.remove(stone);
+                this.bNotProtectedStones.add(stone);
                 break;
             default:
                 System.err.println("Error for Stone "+stone+ " - invalid color: " + color);
@@ -114,18 +121,21 @@ public class Stones {
     /**
      * Add to List of defeated Stones
      * remove from list of set Stones
+     * remove from list of notProtected Stones
      * @param stone is the stone which should be added to list of defeated stones
      */
-    public void defeat_stone(Stone stone) {
+    public void defeatStone(Stone stone) {
         int color = stone.getColor();
         switch(color){
             case 1:
-                this.w_defeated_stones.add(stone);
-                this.w_set_stones.remove(stone);
+                this.wDefeatedStones.add(stone);
+                this.wNotProtectedStones.remove(stone);
+                this.wSetStones.remove(stone);
                 break;
             case 2:
-                this.b_defeated_stones.add(stone);
-                this.b_set_stones.remove(stone);
+                this.bDefeatedStones.add(stone);
+                this.bNotProtectedStones.remove(stone);
+                this.bSetStones.remove(stone);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid player-color!");
@@ -144,14 +154,14 @@ public class Stones {
         int color = stone.getColor();
         switch(color){
             case 1: //stone of player white
-                for(int i=0;i<w_protected_stones.size();i++){
-                    if(w_protected_stones.get(i)==stone){
+                for(int i=0;i<wProtectedStones.size();i++){
+                    if(wProtectedStones.get(i)==stone){
                         return true;
                     }
                 }
             case 2: //stone of player black
-                for(int i=0;i<b_protected_stones.size();i++){
-                    if(b_protected_stones.get(i)==stone){
+                for(int i=0;i<bProtectedStones.size();i++){
+                    if(bProtectedStones.get(i)==stone){
                         return true;
                     }
                 }              
@@ -166,21 +176,27 @@ public class Stones {
      */
     public void recalculateProtected(){
         //recalculate the protected stones for white
-        this.w_protected_stones = new ArrayList<>();
-        for(int i=0;i<w_set_stones.size();i++){
+        this.wProtectedStones = new ArrayList<>();
+        this.wNotProtectedStones = new ArrayList<>();
+        for(int i=0;i<wSetStones.size();i++){
             //System.out.println("Nächster Stein wird überprüft...");
-            Stone check_stone = w_set_stones.get(i);
-            if(checkIfStonePartOfMuehle(check_stone)){
-                w_protected_stones.add(check_stone);
+            Stone check_stone = wSetStones.get(i);
+            if(iSStonePartOfMuehle(check_stone)){
+                wProtectedStones.add(check_stone);
+            }else{
+                wNotProtectedStones.add(check_stone);
             }
         }  
-        //recalculate the protected stones for blacl
-        this.b_protected_stones = new ArrayList<>();
-        for(int i=0;i<b_set_stones.size();i++){
+        //recalculate the protected stones for black
+        this.bProtectedStones = new ArrayList<>();
+        this.bNotProtectedStones = new ArrayList<>();
+        for(int i=0;i<bSetStones.size();i++){
             //System.out.println("Nächster Stein wird überprüft...");
-            Stone check_stone = b_set_stones.get(i);
-            if(checkIfStonePartOfMuehle(check_stone)){
-                b_protected_stones.add(check_stone);
+            Stone check_stone = bSetStones.get(i);
+            if(iSStonePartOfMuehle(check_stone)){
+                bProtectedStones.add(check_stone);
+            }else{
+                bNotProtectedStones.add(check_stone);
             }
         }  
     }
@@ -192,8 +208,8 @@ public class Stones {
     private ArrayList<Cell[]> getPossibleMuehle(Stone stone){
         Cell cell = stone.getPos();
         ArrayList<Cell[]> possible_muehle_stone = new ArrayList<>();
-        for(int i=0;i<list_possible_muehle.size();i++){
-            Cell[] muehle_candidate = list_possible_muehle.get(i);
+        for(int i=0;i<listPossibleMuehle.size();i++){
+            Cell[] muehle_candidate = listPossibleMuehle.get(i);
             if(cellArrayContainsCell(muehle_candidate,cell)){
                 possible_muehle_stone.add(muehle_candidate);
             }
@@ -209,7 +225,7 @@ public class Stones {
      * @return true if stone is part of a muehle
      * false if not part of a muehle
      */
-    public boolean checkIfStonePartOfMuehle(Stone stone){
+    public boolean iSStonePartOfMuehle(Stone stone){
         int color = stone.getColor();
         ArrayList<Cell[]> candidates = getPossibleMuehle(stone);
         //System.out.println("Kandidat: ");
@@ -227,15 +243,15 @@ public class Stones {
                 System.out.println("No Stone on Cell "+cell+ " found.");
                 return null;
             case 1: //search white stones
-                for(int i=0;i<w_set_stones.size();i++){
-                    if(w_set_stones.get(i).getPos() == cell){
-                        return w_set_stones.get(i);
+                for(int i=0;i<wSetStones.size();i++){
+                    if(wSetStones.get(i).getPos() == cell){
+                        return wSetStones.get(i);
                     }
                 }
             case 2: //search black stones
-                for(int i=0;i<b_set_stones.size();i++){
-                    if(b_set_stones.get(i).getPos() == cell){
-                        return b_set_stones.get(i);
+                for(int i=0;i<bSetStones.size();i++){
+                    if(bSetStones.get(i).getPos() == cell){
+                        return bSetStones.get(i);
                     }
                 }
             default:
@@ -246,58 +262,68 @@ public class Stones {
     public ArrayList<Stone> getStones(int color) {
         switch(color){
             case 1:
-                return w_stones;
+                return wStones;
             case 2:
-                return b_stones;
+                return bStones;
             default:
                 throw new IllegalArgumentException("Invalid player-color!");
         }
     }
 
-    public ArrayList<Stone> getSet_stones(int color) {
+    public ArrayList<Stone> getSetStones(int color) {
         switch(color){
             case 1:
-                return w_set_stones;
+                return wSetStones;
             case 2:
-                return b_set_stones;
+                return bSetStones;
             default:
                 throw new IllegalArgumentException("Invalid player-color!");
         }
     }
 
-    public ArrayList<Stone> getNotset_stones(int color) {
+    public ArrayList<Stone> getNotsetStones(int color) {
         switch(color){
             case 1:
-                return w_notset_stones;
+                return wNotsetStones;
             case 2:
-                return b_notset_stones;
+                return bNotsetStones;
             default:
                 throw new IllegalArgumentException("Invalid player-color!");
         }
     }
 
-    public ArrayList<Stone> getDefeated_stones(int color) {
+    public ArrayList<Stone> getDefeatedStones(int color) {
         switch(color){
             case 1:
-                return w_defeated_stones;
+                return wDefeatedStones;
             case 2:
-                return b_defeated_stones;
+                return bDefeatedStones;
             default:
                 throw new IllegalArgumentException("Invalid player-color!");
         }
     }
 
-    public ArrayList<Stone> getProtected_stones(int color) {
+    public ArrayList<Stone> getProtectedStones(int color) {
         switch(color){
             case 1:
-                return w_protected_stones;
+                return wProtectedStones;
             case 2:
-                return b_protected_stones;
+                return bProtectedStones;
             default:
                 throw new IllegalArgumentException("Invalid player-color!");
         }
     }
     
+    public ArrayList<Stone> getNotProtectedStones(int color) {
+        switch(color){
+            case 1:
+                return wNotProtectedStones;
+            case 2:
+                return bNotProtectedStones;
+            default:
+                throw new IllegalArgumentException("Invalid player-color!");
+        }
+    }
     /*
     * simple method to loop over array of cells
     * to check if it contains a specific cell 

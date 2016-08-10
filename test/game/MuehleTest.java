@@ -5,6 +5,7 @@
 package game;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import org.junit.After;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Rule;
 
 /**
  *
@@ -54,6 +56,7 @@ public class MuehleTest {
         // then we attach the clients/players to the game
         muehleGame.setPlayer(1, whitePlayer);
         muehleGame.setPlayer(2, blackPlayer);
+        
         //call stop game to prevent game loop from being exceuted
         muehleGame.stopGame();
         //call start game to initialize vars but because we called stop game before
@@ -65,6 +68,7 @@ public class MuehleTest {
     public void tearDown(){
     }
 
+   
     /**
      * Test of getMoveValidator method, of class Muehle.
      */
@@ -163,17 +167,35 @@ public class MuehleTest {
      * moves stone
      */
     @Test
-    public void testWaitForMove() throws Exception{
+    public void testWaitForMove_ValidMove() throws Exception{
+        System.out.println("testWaitForMove_ValidMove");
         Cell cell0 = board.getAllCells().get(0);
-        whitePlayer.move = new Move(stones.getNext_notset_stones(1),cell0);
+        whitePlayer.move = new Move(stones.getNextNotsetStone(1),cell0);
         
         Method method_waitForMove = Muehle.class.getDeclaredMethod("waitForMove", (Class<?>[]) null);
         method_waitForMove.setAccessible(true);
         method_waitForMove.invoke(muehleGame, null);
         
         int expResult = 8;
-        int result = stones.getNotset_stones(1).size();
+        int result = stones.getNotsetStones(1).size();
         assertEquals("After setting one stone, size of notset_stones for Player 1 should be 8",expResult,result);
+    }
+        /**
+     * Test of waitForMove method, of class Muehle.
+     * method is private and called within game loop
+     * gets a invalid move from TestPlayer (set stone to null pos)
+     * moves stone
+     */
+    @Test(expected=InvocationTargetException.class)
+    public void testWaitForMove_InvalidMove() throws Exception{
+        System.out.println("testWaitForMove_InvalidMove");
+        Cell cell0 = board.getAllCells().get(0);
+        whitePlayer.move = new Move(stones.getNextNotsetStone(1),null);
+        
+        Method method_waitForMove = Muehle.class.getDeclaredMethod("waitForMove", (Class<?>[]) null);
+        method_waitForMove.setAccessible(true);
+        method_waitForMove.invoke(muehleGame, null);
+
     }
     
 }
