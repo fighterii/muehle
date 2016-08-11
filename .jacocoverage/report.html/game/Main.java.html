@@ -4,29 +4,31 @@
  */
 package game;
 
+import gui.Console;
 import gui.JGame;
 
 /**
  *
  * @author Kai
  */
-<span class="nc" id="L13">public class Main {</span>
+<span class="nc" id="L14">public class Main {</span>
     public static void main(String[] args) {
 
         // first we create the game
-<span class="nc" id="L17">        Muehle muehleGame = new Muehle();</span>
+<span class="nc" id="L18">        Muehle muehleGame = new Muehle();</span>
 
         // then we create the clients/players
-<span class="nc" id="L20">        JGame muehleGui = new JGame(muehleGame);</span>
+        //JGame muehleGui = new JGame(muehleGame);
+<span class="nc" id="L22">        Console consoleGui = new Console(muehleGame);</span>
         
-<span class="nc" id="L22">        SimpleAiPlayerHandler ai1 = new SimpleAiPlayerHandler(muehleGame);</span>
+<span class="nc" id="L24">        RandomAiPlayer ai1 = new RandomAiPlayer(muehleGame);</span>
 
         // then we attach the clients/players to the game
-<span class="nc" id="L25">        muehleGame.setPlayer(1, muehleGui);</span>
-<span class="nc" id="L26">        muehleGame.setPlayer(2, ai1);</span>
+<span class="nc" id="L27">        muehleGame.setPlayer(1, consoleGui);</span>
+<span class="nc" id="L28">        muehleGame.setPlayer(2, ai1);</span>
 
         // in the end we start the game
-<span class="nc" id="L29">        new Thread(muehleGame).start();</span>
-<span class="nc" id="L30">	}    </span>
+<span class="nc" id="L31">        new Thread(muehleGame).start();</span>
+<span class="nc" id="L32">	}    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

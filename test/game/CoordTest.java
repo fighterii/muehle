@@ -64,16 +64,10 @@ public class CoordTest {
         Coord coord3 = new Coord(-1,0);
         assertFalse("Coord(-1,0) should be invalid position",coord3.isValidPos());
         Coord coord4 = new Coord(0,3);
-        assertFalse("Coord(0,3) should be invalid position",coord4.isValidPos());
-        Coord coord5 = new Coord(3,0);
-        assertFalse("Coord(3,0) should be invalid position",coord5.isValidPos());
+        assertTrue("Coord(0,3) should be valid position",coord4.isValidPos());
+        Coord coord5 = new Coord(2,0);
+        assertFalse("Coord(2,0) should be invalid position",coord5.isValidPos());
     }
-    @Test
-    public void testIsValidPosCenter() {
-        Coord coord6 = new Coord(1,1);
-        assertFalse("Coord(1,1) should be invalid position",coord6.isValidPos());
-    }
-
 
     /**
      * Test of equals method, of class Coord.

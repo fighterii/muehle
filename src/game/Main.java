@@ -18,16 +18,17 @@ public class Main {
         Muehle muehleGame = new Muehle();
 
         // then we create the clients/players
-        //JGame muehleGui = new JGame(muehleGame);
-        Console consoleGui = new Console(muehleGame);
+        JGame humanPlayer = new JGame(muehleGame);
+        //Console humanPlayer = new Console(muehleGame);
         
-        RandomAiPlayer ai1 = new RandomAiPlayer(muehleGame);
+        RandomAiPlayer aiPlayer = new RandomAiPlayer(muehleGame);
 
         // then we attach the clients/players to the game
-        muehleGame.setPlayer(1, consoleGui);
-        muehleGame.setPlayer(2, ai1);
+        muehleGame.setPlayer(1, humanPlayer);
+        muehleGame.setPlayer(2, aiPlayer);
 
         // in the end we start the game
+        humanPlayer.setVisible(true);
         new Thread(muehleGame).start();
 	}    
 }

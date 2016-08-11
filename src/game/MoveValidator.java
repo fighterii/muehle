@@ -28,12 +28,16 @@ public class MoveValidator {
         boolean second_move = muehleGame.isSecond_move();
         IPlayerHandler activePlayer = muehleGame.getActivePlayer();
         Stone stone = move.stone;
+        if(stone==null){
+            //if no stone is provided, move is invalid
+            return false;
+        }
         Cell source = stone.getPos();
         int stone_color = stone.getColor();
         Cell target = move.target;
         int player_color;
-        System.out.println("ActivePlayer isValidMove:" + activePlayer);
-        System.out.println("blackPlayer isValidMove:" + blackPlayer);
+        //System.out.println("ActivePlayer isValidMove:" + activePlayer);
+        //System.out.println("blackPlayer isValidMove:" + blackPlayer);
         if(activePlayer==this.whitePlayer){
             player_color=1;
         }else if(activePlayer==this.blackPlayer){

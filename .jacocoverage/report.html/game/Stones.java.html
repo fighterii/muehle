@@ -22,39 +22,43 @@ public class Stones {
     private ArrayList&lt;Stone&gt; wNotsetStones;
     private ArrayList&lt;Stone&gt; wDefeatedStones;
     private ArrayList&lt;Stone&gt; wProtectedStones;
+    private ArrayList&lt;Stone&gt; wNotProtectedStones;
     private ArrayList&lt;Stone&gt; bStones;
     private ArrayList&lt;Stone&gt; bSetStones;
     private ArrayList&lt;Stone&gt; bNotsetStones;
     private ArrayList&lt;Stone&gt; bDefeatedStones;
     private ArrayList&lt;Stone&gt; bProtectedStones;
+    private ArrayList&lt;Stone&gt; bNotProtectedStones;
     private ArrayList&lt;Cell[]&gt; listPossibleMuehle;
     
-<span class="fc" id="L32">    public Stones(Board board){</span>
+<span class="fc" id="L34">    public Stones(Board board){</span>
         //Initialize all stones and lists for player white
-<span class="fc" id="L34">        System.out.println(&quot;initialize lists for player white&quot;);</span>
-<span class="fc" id="L35">        this.wStones = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L36" title="All 2 branches covered.">            for(int i=0;i&lt;9;i++){</span>
-<span class="fc" id="L37">                wStones.add(new Stone(1));</span>
+<span class="fc" id="L36">        System.out.println(&quot;initialize lists for player white&quot;);</span>
+<span class="fc" id="L37">        this.wStones = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            for(int i=0;i&lt;9;i++){</span>
+<span class="fc" id="L39">                wStones.add(new Stone(1));</span>
             }
-<span class="fc" id="L39">        this.wSetStones = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L40">        this.wNotsetStones = wStones;</span>
-<span class="fc" id="L41">        this.wDefeatedStones = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L42">        this.wProtectedStones = new ArrayList&lt;&gt;();  </span>
-<span class="fc" id="L43">        System.out.println(&quot;initialize lists for player black&quot;);</span>
+<span class="fc" id="L41">        this.wSetStones = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L42">        this.wNotsetStones = wStones;</span>
+<span class="fc" id="L43">        this.wDefeatedStones = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L44">        this.wProtectedStones = new ArrayList&lt;&gt;();  </span>
+<span class="fc" id="L45">        this.wNotProtectedStones = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L46">        System.out.println(&quot;initialize lists for player black&quot;);</span>
         //Initialize all stones and lists for player black
-<span class="fc" id="L45">        this.bStones = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        for(int i=0;i&lt;9;i++){</span>
-<span class="fc" id="L47">            bStones.add(new Stone(2));</span>
+<span class="fc" id="L48">        this.bStones = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(int i=0;i&lt;9;i++){</span>
+<span class="fc" id="L50">            bStones.add(new Stone(2));</span>
         }
-<span class="fc" id="L49">        this.bSetStones = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L50">        this.bNotsetStones = bStones;      </span>
-<span class="fc" id="L51">        this.bDefeatedStones = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L52">        this.bProtectedStones = new ArrayList&lt;&gt;();  </span>
+<span class="fc" id="L52">        this.bSetStones = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L53">        this.bNotsetStones = bStones;      </span>
+<span class="fc" id="L54">        this.bDefeatedStones = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L55">        this.bProtectedStones = new ArrayList&lt;&gt;();  </span>
+<span class="fc" id="L56">        this.bNotProtectedStones = new ArrayList&lt;&gt;();</span>
         
         //get list with possible Muehle candidates
-<span class="fc" id="L55">        this.listPossibleMuehle = board.getPossibleMuehle();</span>
-<span class="fc" id="L56">        System.out.println(&quot;All stones initialized&quot;);</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L59">        this.listPossibleMuehle = board.getPossibleMuehle();</span>
+<span class="fc" id="L60">        System.out.println(&quot;All stones initialized&quot;);</span>
+<span class="fc" id="L61">    }</span>
 
     /**
      *
@@ -62,13 +66,13 @@ public class Stones {
      * @return next unset white stones
      */
     public Stone getNextNotsetStone(int color) {
-<span class="pc bpc" id="L65" title="1 of 3 branches missed.">        switch(color){</span>
+<span class="pc bpc" id="L69" title="1 of 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="fc" id="L67">                return wNotsetStones.get(0);</span>
+<span class="fc" id="L71">                return wNotsetStones.get(0);</span>
             case 2:
-<span class="fc" id="L69">                return bNotsetStones.get(0);</span>
+<span class="fc" id="L73">                return bNotsetStones.get(0);</span>
             default:
-<span class="nc" id="L71">                throw new IllegalArgumentException(&quot;Invalid color!&quot;);</span>
+<span class="nc" id="L75">                throw new IllegalArgumentException(&quot;Invalid color!&quot;);</span>
         }
 
     }
@@ -80,59 +84,64 @@ public class Stones {
      * size == 9 indicates the player has lost
      */
     public int getSizeDefeatedStones(int color){
-<span class="pc bpc" id="L83" title="1 of 3 branches missed.">        switch(color){</span>
+<span class="pc bpc" id="L87" title="1 of 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="fc" id="L85">                System.out.println(wDefeatedStones);</span>
-<span class="fc" id="L86">                return wDefeatedStones.size();</span>
+<span class="fc" id="L89">                System.out.println(wDefeatedStones);</span>
+<span class="fc" id="L90">                return wDefeatedStones.size();</span>
             case 2:
-<span class="fc" id="L88">                return bDefeatedStones.size();</span>
+<span class="fc" id="L92">                return bDefeatedStones.size();</span>
             default:
-<span class="nc" id="L90">                throw new IllegalArgumentException(&quot;Invalid color!&quot;);</span>
+<span class="nc" id="L94">                throw new IllegalArgumentException(&quot;Invalid color!&quot;);</span>
         }
     }
     /**
      * Add to List of Stones on Board
      * @param stone is the stone which should be added to list of stones on board
-     * also delete from list of notset_stones
+     * also delete from list of notSetStones and add to list of notProtectedStones
      */
     public void setStone(Stone stone) {
-<span class="fc" id="L99">       int color = stone.getColor();</span>
-<span class="fc" id="L100">       System.out.println(&quot;Setting stone &quot;+stone);</span>
-<span class="pc bpc" id="L101" title="1 of 3 branches missed.">       switch(color){</span>
+<span class="fc" id="L103">       int color = stone.getColor();</span>
+       //System.out.println(&quot;Setting stone &quot;+stone+&quot;&quot;);
+<span class="pc bpc" id="L105" title="1 of 3 branches missed.">       switch(color){</span>
             case 1:
-<span class="fc" id="L103">                this.wSetStones.add(stone);</span>
-<span class="fc" id="L104">                this.wNotsetStones.remove(stone);</span>
-<span class="fc" id="L105">                break;</span>
+<span class="fc" id="L107">                this.wSetStones.add(stone);</span>
+<span class="fc" id="L108">                this.wNotsetStones.remove(stone);</span>
+<span class="fc" id="L109">                this.wNotProtectedStones.add(stone);</span>
+<span class="fc" id="L110">                break;</span>
             case 2:
-<span class="fc" id="L107">                this.bSetStones.add(stone);</span>
-<span class="fc" id="L108">                this.bNotsetStones.remove(stone);</span>
-<span class="fc" id="L109">                break;</span>
+<span class="fc" id="L112">                this.bSetStones.add(stone);</span>
+<span class="fc" id="L113">                this.bNotsetStones.remove(stone);</span>
+<span class="fc" id="L114">                this.bNotProtectedStones.add(stone);</span>
+<span class="fc" id="L115">                break;</span>
             default:
-<span class="nc" id="L111">                System.err.println(&quot;Error for Stone &quot;+stone+ &quot; - invalid color: &quot; + color);</span>
-<span class="nc" id="L112">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+<span class="nc" id="L117">                System.err.println(&quot;Error for Stone &quot;+stone+ &quot; - invalid color: &quot; + color);</span>
+<span class="nc" id="L118">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
         }
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L120">    }</span>
     /**
      * Add to List of defeated Stones
      * remove from list of set Stones
+     * remove from list of notProtected Stones
      * @param stone is the stone which should be added to list of defeated stones
      */
     public void defeatStone(Stone stone) {
-<span class="fc" id="L121">        int color = stone.getColor();</span>
-<span class="pc bpc" id="L122" title="2 of 3 branches missed.">        switch(color){</span>
+<span class="fc" id="L128">        int color = stone.getColor();</span>
+<span class="pc bpc" id="L129" title="2 of 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="fc" id="L124">                this.wDefeatedStones.add(stone);</span>
-<span class="fc" id="L125">                this.wSetStones.remove(stone);</span>
-<span class="fc" id="L126">                break;</span>
+<span class="fc" id="L131">                this.wDefeatedStones.add(stone);</span>
+<span class="fc" id="L132">                this.wNotProtectedStones.remove(stone);</span>
+<span class="fc" id="L133">                this.wSetStones.remove(stone);</span>
+<span class="fc" id="L134">                break;</span>
             case 2:
-<span class="nc" id="L128">                this.bDefeatedStones.add(stone);</span>
-<span class="nc" id="L129">                this.bSetStones.remove(stone);</span>
-<span class="nc" id="L130">                break;</span>
+<span class="nc" id="L136">                this.bDefeatedStones.add(stone);</span>
+<span class="nc" id="L137">                this.bNotProtectedStones.remove(stone);</span>
+<span class="nc" id="L138">                this.bSetStones.remove(stone);</span>
+<span class="nc" id="L139">                break;</span>
             default:
-<span class="nc" id="L132">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+<span class="nc" id="L141">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
                 
         }
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L144">    }</span>
    
     /**
      * returns wether a particular
@@ -142,24 +151,24 @@ public class Stones {
      */
     public boolean isStoneProtected(Stone stone){
         //first check if Stone is within list of protected stones of player white:
-<span class="fc" id="L145">        int color = stone.getColor();</span>
-<span class="pc bpc" id="L146" title="2 of 3 branches missed.">        switch(color){</span>
+<span class="fc" id="L154">        int color = stone.getColor();</span>
+<span class="pc bpc" id="L155" title="2 of 3 branches missed.">        switch(color){</span>
             case 1: //stone of player white
-<span class="pc bfc" id="L148" title="All 2 branches covered.">                for(int i=0;i&lt;wProtectedStones.size();i++){</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">                    if(wProtectedStones.get(i)==stone){</span>
-<span class="fc" id="L150">                        return true;</span>
+<span class="pc bfc" id="L157" title="All 2 branches covered.">                for(int i=0;i&lt;wProtectedStones.size();i++){</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">                    if(wProtectedStones.get(i)==stone){</span>
+<span class="fc" id="L159">                        return true;</span>
                     }
                 }
             case 2: //stone of player black
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">                for(int i=0;i&lt;bProtectedStones.size();i++){</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">                    if(bProtectedStones.get(i)==stone){</span>
-<span class="nc" id="L156">                        return true;</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">                for(int i=0;i&lt;bProtectedStones.size();i++){</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                    if(bProtectedStones.get(i)==stone){</span>
+<span class="nc" id="L165">                        return true;</span>
                     }
                 }              
             default:
                 break;
         }
-<span class="fc" id="L162">        return false;</span>
+<span class="fc" id="L171">        return false;</span>
     }
     
     /** 
@@ -167,39 +176,45 @@ public class Stones {
      */
     public void recalculateProtected(){
         //recalculate the protected stones for white
-<span class="fc" id="L170">        this.wProtectedStones = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L171" title="All 2 branches covered.">        for(int i=0;i&lt;wSetStones.size();i++){</span>
+<span class="fc" id="L179">        this.wProtectedStones = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L180">        this.wNotProtectedStones = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        for(int i=0;i&lt;wSetStones.size();i++){</span>
             //System.out.println(&quot;Nächster Stein wird überprüft...&quot;);
-<span class="fc" id="L173">            Stone check_stone = wSetStones.get(i);</span>
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">            if(iSStonePartOfMuehle(check_stone)){</span>
-<span class="fc" id="L175">                wProtectedStones.add(check_stone);</span>
+<span class="fc" id="L183">            Stone check_stone = wSetStones.get(i);</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">            if(iSStonePartOfMuehle(check_stone)){</span>
+<span class="fc" id="L185">                wProtectedStones.add(check_stone);</span>
+            }else{
+<span class="nc" id="L187">                wNotProtectedStones.add(check_stone);</span>
             }
         }  
-        //recalculate the protected stones for blacl
-<span class="fc" id="L179">        this.bProtectedStones = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L180" title="All 2 branches covered.">        for(int i=0;i&lt;bSetStones.size();i++){</span>
+        //recalculate the protected stones for black
+<span class="fc" id="L191">        this.bProtectedStones = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L192">        this.bNotProtectedStones = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        for(int i=0;i&lt;bSetStones.size();i++){</span>
             //System.out.println(&quot;Nächster Stein wird überprüft...&quot;);
-<span class="fc" id="L182">            Stone check_stone = bSetStones.get(i);</span>
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            if(iSStonePartOfMuehle(check_stone)){</span>
-<span class="nc" id="L184">                bProtectedStones.add(check_stone);</span>
+<span class="fc" id="L195">            Stone check_stone = bSetStones.get(i);</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">            if(iSStonePartOfMuehle(check_stone)){</span>
+<span class="nc" id="L197">                bProtectedStones.add(check_stone);</span>
+            }else{
+<span class="fc" id="L199">                bNotProtectedStones.add(check_stone);</span>
             }
         }  
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L202">    }</span>
     /**
      * Method getPossibleMuehle 
      * @return a List with all possible Muehle for the 
      * @param stone position. 
      */
     private ArrayList&lt;Cell[]&gt; getPossibleMuehle(Stone stone){
-<span class="fc" id="L194">        Cell cell = stone.getPos();</span>
-<span class="fc" id="L195">        ArrayList&lt;Cell[]&gt; possible_muehle_stone = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        for(int i=0;i&lt;listPossibleMuehle.size();i++){</span>
-<span class="fc" id="L197">            Cell[] muehle_candidate = listPossibleMuehle.get(i);</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">            if(cellArrayContainsCell(muehle_candidate,cell)){</span>
-<span class="fc" id="L199">                possible_muehle_stone.add(muehle_candidate);</span>
+<span class="fc" id="L209">        Cell cell = stone.getPos();</span>
+<span class="fc" id="L210">        ArrayList&lt;Cell[]&gt; possible_muehle_stone = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        for(int i=0;i&lt;listPossibleMuehle.size();i++){</span>
+<span class="fc" id="L212">            Cell[] muehle_candidate = listPossibleMuehle.get(i);</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            if(cellArrayContainsCell(muehle_candidate,cell)){</span>
+<span class="fc" id="L214">                possible_muehle_stone.add(muehle_candidate);</span>
             }
         }
-<span class="fc" id="L202">        return possible_muehle_stone;</span>
+<span class="fc" id="L217">        return possible_muehle_stone;</span>
     }
     
      /**
@@ -211,106 +226,116 @@ public class Stones {
      * false if not part of a muehle
      */
     public boolean iSStonePartOfMuehle(Stone stone){
-<span class="fc" id="L214">        int color = stone.getColor();</span>
-<span class="fc" id="L215">        ArrayList&lt;Cell[]&gt; candidates = getPossibleMuehle(stone);</span>
+<span class="fc" id="L229">        int color = stone.getColor();</span>
+<span class="fc" id="L230">        ArrayList&lt;Cell[]&gt; candidates = getPossibleMuehle(stone);</span>
         //System.out.println(&quot;Kandidat: &quot;);
         //System.out.println(candidate[0] + &quot;-&quot;+candidate[1] + &quot;-&quot;+candidate[2] + &quot;-&quot;);
         //System.out.println(&quot;Geschützter Stein gefunden: &quot;);
-<span class="fc bfc" id="L219" title="All 2 branches covered.">        return candidates.stream().anyMatch((candidate) -&gt; ((candidate[0].getStoneColor()==color)&amp;</span>
-<span class="fc bfc" id="L220" title="All 2 branches covered.">                (candidate[1].getStoneColor()==color)&amp;</span>
-<span class="fc bfc" id="L221" title="All 2 branches covered.">                (candidate[2].getStoneColor()==color)));</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        return candidates.stream().anyMatch((candidate) -&gt; ((candidate[0].getStoneColor()==color)&amp;</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">                (candidate[1].getStoneColor()==color)&amp;</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                (candidate[2].getStoneColor()==color)));</span>
     }
     
     public Stone getStoneOnPos(Cell cell) {
-<span class="fc" id="L225">        int color = cell.getStoneColor();</span>
-<span class="pc bpc" id="L226" title="1 of 4 branches missed.">        switch(color){</span>
+<span class="fc" id="L240">        int color = cell.getStoneColor();</span>
+<span class="pc bpc" id="L241" title="1 of 4 branches missed.">        switch(color){</span>
             case 0: //no Stone on cell
-<span class="fc" id="L228">                System.out.println(&quot;No Stone on Cell &quot;+cell+ &quot; found.&quot;);</span>
-<span class="fc" id="L229">                return null;</span>
+<span class="fc" id="L243">                System.out.println(&quot;No Stone on Cell &quot;+cell+ &quot; found.&quot;);</span>
+<span class="fc" id="L244">                return null;</span>
             case 1: //search white stones
-<span class="pc bpc" id="L231" title="1 of 2 branches missed.">                for(int i=0;i&lt;wSetStones.size();i++){</span>
-<span class="pc bpc" id="L232" title="1 of 2 branches missed.">                    if(wSetStones.get(i).getPos() == cell){</span>
-<span class="fc" id="L233">                        return wSetStones.get(i);</span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">                for(int i=0;i&lt;wSetStones.size();i++){</span>
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">                    if(wSetStones.get(i).getPos() == cell){</span>
+<span class="fc" id="L248">                        return wSetStones.get(i);</span>
                     }
                 }
             case 2: //search black stones
-<span class="pc bpc" id="L237" title="1 of 2 branches missed.">                for(int i=0;i&lt;bSetStones.size();i++){</span>
-<span class="pc bpc" id="L238" title="1 of 2 branches missed.">                    if(bSetStones.get(i).getPos() == cell){</span>
-<span class="fc" id="L239">                        return bSetStones.get(i);</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">                for(int i=0;i&lt;bSetStones.size();i++){</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">                    if(bSetStones.get(i).getPos() == cell){</span>
+<span class="fc" id="L254">                        return bSetStones.get(i);</span>
                     }
                 }
             default:
-<span class="nc" id="L243">                throw new IllegalStateException(&quot;Cell has invalid color information&quot;);            </span>
+<span class="nc" id="L258">                throw new IllegalStateException(&quot;Cell has invalid color information&quot;);            </span>
         }
     }
 
     public ArrayList&lt;Stone&gt; getStones(int color) {
-<span class="nc bnc" id="L248" title="All 3 branches missed.">        switch(color){</span>
+<span class="nc bnc" id="L263" title="All 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="nc" id="L250">                return wStones;</span>
+<span class="nc" id="L265">                return wStones;</span>
             case 2:
-<span class="nc" id="L252">                return bStones;</span>
+<span class="nc" id="L267">                return bStones;</span>
             default:
-<span class="nc" id="L254">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+<span class="nc" id="L269">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
         }
     }
 
     public ArrayList&lt;Stone&gt; getSetStones(int color) {
-<span class="pc bpc" id="L259" title="1 of 3 branches missed.">        switch(color){</span>
+<span class="pc bpc" id="L274" title="1 of 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="fc" id="L261">                return wSetStones;</span>
+<span class="fc" id="L276">                return wSetStones;</span>
             case 2:
-<span class="fc" id="L263">                return bSetStones;</span>
+<span class="fc" id="L278">                return bSetStones;</span>
             default:
-<span class="nc" id="L265">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+<span class="nc" id="L280">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
         }
     }
 
     public ArrayList&lt;Stone&gt; getNotsetStones(int color) {
-<span class="pc bpc" id="L270" title="1 of 3 branches missed.">        switch(color){</span>
+<span class="pc bpc" id="L285" title="1 of 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="fc" id="L272">                return wNotsetStones;</span>
+<span class="fc" id="L287">                return wNotsetStones;</span>
             case 2:
-<span class="fc" id="L274">                return bNotsetStones;</span>
+<span class="fc" id="L289">                return bNotsetStones;</span>
             default:
-<span class="nc" id="L276">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+<span class="nc" id="L291">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
         }
     }
 
     public ArrayList&lt;Stone&gt; getDefeatedStones(int color) {
-<span class="nc bnc" id="L281" title="All 3 branches missed.">        switch(color){</span>
+<span class="nc bnc" id="L296" title="All 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="nc" id="L283">                return wDefeatedStones;</span>
+<span class="nc" id="L298">                return wDefeatedStones;</span>
             case 2:
-<span class="nc" id="L285">                return bDefeatedStones;</span>
+<span class="nc" id="L300">                return bDefeatedStones;</span>
             default:
-<span class="nc" id="L287">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+<span class="nc" id="L302">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
         }
     }
 
     public ArrayList&lt;Stone&gt; getProtectedStones(int color) {
-<span class="pc bpc" id="L292" title="1 of 3 branches missed.">        switch(color){</span>
+<span class="pc bpc" id="L307" title="1 of 3 branches missed.">        switch(color){</span>
             case 1:
-<span class="fc" id="L294">                return wProtectedStones;</span>
+<span class="fc" id="L309">                return wProtectedStones;</span>
             case 2:
-<span class="fc" id="L296">                return bProtectedStones;</span>
+<span class="fc" id="L311">                return bProtectedStones;</span>
             default:
-<span class="nc" id="L298">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+<span class="nc" id="L313">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
         }
     }
     
+    public ArrayList&lt;Stone&gt; getNotProtectedStones(int color) {
+<span class="pc bpc" id="L318" title="1 of 3 branches missed.">        switch(color){</span>
+            case 1:
+<span class="fc" id="L320">                return wNotProtectedStones;</span>
+            case 2:
+<span class="fc" id="L322">                return bNotProtectedStones;</span>
+            default:
+<span class="nc" id="L324">                throw new IllegalArgumentException(&quot;Invalid player-color!&quot;);</span>
+        }
+    }
     /*
     * simple method to loop over array of cells
     * to check if it contains a specific cell 
     * return true if Cell item is contained within Cell[] arr
     */
     private static boolean cellArrayContainsCell(Cell[] arr, Cell item) {
-<span class="fc bfc" id="L308" title="All 2 branches covered.">      for (Cell n : arr) {</span>
-<span class="fc bfc" id="L309" title="All 2 branches covered.">         if (item == n) {</span>
-<span class="fc" id="L310">            return true;</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">      for (Cell n : arr) {</span>
+<span class="fc bfc" id="L334" title="All 2 branches covered.">         if (item == n) {</span>
+<span class="fc" id="L335">            return true;</span>
          }
       }
-<span class="fc" id="L313">      return false;</span>
+<span class="fc" id="L338">      return false;</span>
    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

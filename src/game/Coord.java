@@ -20,18 +20,38 @@ public class Coord {
     }
 
     /** 
-     * Checks if the position is part of the circle 
-     * 1 1 1 0
-     * 1 0 1 0
-     * 1 1 1 0
-     * 0 0 0 0
-     * 1 = valid
+     * Checks if the coord is Valid
      * @return true if position is valid
      */
     public boolean isValidPos() {
-        if ((x==1)&&(y==1)){
-            return false;
-        }else return !((x<0)|(y<0)|(x>2)|(y>2));
+        if((x>=0)&(y>=0)&(x<7)&(y<7)){
+            //check boundaries
+            if(((y==0)|(y==6))&(x%3==0)){
+                //outer circle, horizontal 
+                //(0|0) (3|0) ...
+                return true;
+            }else if(((x==0)|(x==6))&(y%3==0)){
+                //outer circle, vertical
+                //(0|3)...
+                return true;
+            }else if(((y==1)|(y==5))&((x+1)%2==0)){
+                //middle circle, horizontal
+                //(1|1) (3|1) (5|1)
+                return true;
+            }else if(((x==1)|(x==5))&((y+1)%2==0)){
+                //middle circle, vertical
+                //(1|1) (1|3) (1|5)
+                return true;
+            }else if(((y==2)|(y==4))&((x>=2)&(x<=4))){
+                //inner circle, horizontal
+                //(2|2) (3|2) (4|2)
+                return true;
+            }else if(((x==2)|(x==4))&(y==3)){
+                //missing cells inner circle, vertical
+                return true;
+            }     
+        }
+        return false;
     }
     
    

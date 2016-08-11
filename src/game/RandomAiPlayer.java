@@ -23,6 +23,7 @@ public class RandomAiPlayer implements IPlayerHandler{
     
     @Override
     public Move getMove() {
+        MoveValidator moveValidator = muehleGame.getMoveValidator();
         int type = getTypeOfMove();
         Move move = null;
         Stone stone = null;
@@ -37,6 +38,31 @@ public class RandomAiPlayer implements IPlayerHandler{
                 break;
             case 1:
                 //moving a stone on the board
+                Random rnd = new Random();
+                do{
+                    int rndInt = rnd.nextInt(muehleGame.getStones().getSetStones(color).size());
+                    Stone rndStone = muehleGame.getStones().getSetStones(color).get(rndInt);
+                    Cell cellOfRndStone = rndStone.getPos();
+                    Cell target = null;
+                    int rndIntNeighbor = rnd.nextInt(4);
+                    Cell neighborCell = null;
+                    neighborCell = cellOfRndStone.getNeighbors()[rndIntNeighbor];
+                    //get a rndNeighborCell for the rndCell
+                    if(neighborCell!=null){
+                        //check if its free
+                        if(neighborCell.getStoneColor()==0){
+                            target = neighborCell;
+                        }
+                    }
+                    //if a free neighbor cell was found check if move is valid
+                    if(target!=null){
+                        move = new Move(rndStone,target);
+                        if(!moveValidator.isValidMove(move)){
+                            //if not valid set move to null
+                            move=null;
+                        }
+                    }
+                }while(move==null);
                 break;
             case 2:
                 //defeat an enemy stone
@@ -79,8 +105,8 @@ public class RandomAiPlayer implements IPlayerHandler{
         boolean freeCellFound = false;
         do{
             int rnd_i = rnd.nextInt(24);
-            if(muehleGame.getBoard().getAllCells().get(rnd_i).getStoneColor()==0){
-                cell = muehleGame.getBoard().getAllCells().get(rnd_i);
+            if(muehleGame.getBoard().getListAllCells().get(rnd_i).getStoneColor()==0){
+                cell = muehleGame.getBoard().getListAllCells().get(rnd_i);
                 freeCellFound = true;
             }
         }while(!freeCellFound);

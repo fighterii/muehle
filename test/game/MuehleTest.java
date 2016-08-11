@@ -7,14 +7,12 @@ package game;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Rule;
 
 /**
  *
@@ -169,7 +167,7 @@ public class MuehleTest {
     @Test
     public void testWaitForMove_ValidMove() throws Exception{
         System.out.println("testWaitForMove_ValidMove");
-        Cell cell0 = board.getAllCells().get(0);
+        Cell cell0 = board.getListAllCells().get(0);
         whitePlayer.move = new Move(stones.getNextNotsetStone(1),cell0);
         
         Method method_waitForMove = Muehle.class.getDeclaredMethod("waitForMove", (Class<?>[]) null);
@@ -189,7 +187,7 @@ public class MuehleTest {
     @Test(expected=InvocationTargetException.class)
     public void testWaitForMove_InvalidMove() throws Exception{
         System.out.println("testWaitForMove_InvalidMove");
-        Cell cell0 = board.getAllCells().get(0);
+        Cell cell0 = board.getListAllCells().get(0);
         whitePlayer.move = new Move(stones.getNextNotsetStone(1),null);
         
         Method method_waitForMove = Muehle.class.getDeclaredMethod("waitForMove", (Class<?>[]) null);

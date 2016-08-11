@@ -150,7 +150,7 @@ public class StonesTest {
         System.out.println("isStoneProtected");
         int color = 1;
         Stone stone = stones.getNextNotsetStone(color);
-        stone.setPos(board.getAllCells().get(0));
+        stone.setPos(board.getAllCells()[0][0]);
         stones.setStone(stone);
         boolean expResult = false;
         boolean result = stones.isStoneProtected(stone);
@@ -165,7 +165,7 @@ public class StonesTest {
         int color = 1;
         //setting 3 stones of player white in a line -> should be protected
         Stone stone = stones.getNextNotsetStone(color);
-        stone.setPos(board.getAllCells().get(0));
+        stone.setPos(board.getAllCells()[0][0]);
         stones.setStone(stone);
         Field protectedStonesField = Stones.class.getDeclaredField("wProtectedStones");
         protectedStonesField.setAccessible(true);
@@ -185,7 +185,7 @@ public class StonesTest {
         System.out.println("checkIfStonePartOfMuehle");
         int color = 1;
         Stone stone = stones.getNextNotsetStone(color);
-        stone.setPos(board.getAllCells().get(0));
+        stone.setPos(board.getAllCells()[0][0]);
         stones.setStone(stone);
         boolean expResult = false;
         boolean result = stones.iSStonePartOfMuehle(stone);
@@ -213,7 +213,7 @@ public class StonesTest {
     @Test
     public void testGetStoneOnPos_White() {
         System.out.println("getStoneOnPos");
-        Cell cell = board.getAllCells().get(0);
+        Cell cell = board.getAllCells()[0][0];
         Stone stone = stones.getNextNotsetStone(1);
         stone.setPos(cell);
         stones.setStone(stone);
@@ -227,7 +227,7 @@ public class StonesTest {
     @Test
     public void testGetStoneOnPos_Black() {
         System.out.println("getStoneOnPos");
-        Cell cell = board.getAllCells().get(0);
+        Cell cell = board.getAllCells()[0][0];
         Stone stone = stones.getNextNotsetStone(2);
         stone.setPos(cell);
         stones.setStone(stone);
@@ -242,7 +242,7 @@ public class StonesTest {
     @Test
     public void testGetStoneOnPos_NoStone() {
         System.out.println("getStoneOnPos");
-        Cell cell = board.getAllCells().get(0);
+        Cell cell = board.getAllCells()[0][0];
         Stone expResult = null;
         Stone result = stones.getStoneOnPos(cell);
         assertEquals("If cell0 is empty, it should return null",expResult, result);
@@ -251,21 +251,21 @@ public class StonesTest {
     @Test
     public void testRecalculateProtected(){
         System.out.println("recalculate protected");
-        //first set 3 stones on 0,1,2
+        //first set 3 stones in a row on 0,1,2
         set3StonesWhite();
-        //then set 2 stones on 3,5
+        //then set 2 stones on 9,21
         //this creates 2 muehle, with the stone on 0 double
         Stone stone = stones.getNextNotsetStone(1);
-        stone.setPos(board.getAllCells().get(3));
+        stone.setPos(board.getAllCells()[3][0]);
         stones.setStone(stone);
         
         stone = stones.getNextNotsetStone(1);
-        stone.setPos(board.getAllCells().get(5));
+        stone.setPos(board.getAllCells()[6][0]);
         stones.setStone(stone);
         
         //also set one black stone
         stone = stones.getNextNotsetStone(2);
-        stone.setPos(board.getAllCells().get(6));
+        stone.setPos(board.getAllCells()[4][3]);
         stones.setStone(stone);
         
         stones.recalculateProtected();
@@ -296,15 +296,15 @@ public class StonesTest {
         int color = 1;
         //setting 3 stones of player white in a line -> should be protected
         Stone stone = stones.getNextNotsetStone(color);
-        stone.setPos(board.getAllCells().get(0));
+        stone.setPos(board.getAllCells()[0][0]);
         stones.setStone(stone);
         
         stone = stones.getNextNotsetStone(color);
-        stone.setPos(board.getAllCells().get(1));
+        stone.setPos(board.getAllCells()[0][3]);
         stones.setStone(stone);
         
         stone = stones.getNextNotsetStone(color);
-        stone.setPos(board.getAllCells().get(2));
+        stone.setPos(board.getAllCells()[0][6]);
         stones.setStone(stone);
         return stone;
     }

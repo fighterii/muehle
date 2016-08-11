@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RandomAiPlayer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Muehle&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">game</a> &gt; <span class="el_source">RandomAiPlayer.java</span></div><h1>RandomAiPlayer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 by Kai Braunias
+ * 
+ */
+package game;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ *
+ * @author Kai
+ */
+public class RandomAiPlayer implements IPlayerHandler{
+    private Muehle muehleGame;
+    private int color;
+    
+<span class="nc" id="L18">    public RandomAiPlayer(Muehle muehleGame){</span>
+<span class="nc" id="L19">        this.muehleGame = muehleGame;</span>
+        //AiPlayer is black player
+<span class="nc" id="L21">        this.color = 2;</span>
+<span class="nc" id="L22">    }</span>
+    
+    @Override
+    public Move getMove() {
+<span class="nc" id="L26">        int type = getTypeOfMove();</span>
+<span class="nc" id="L27">        Move move = null;</span>
+<span class="nc" id="L28">        Stone stone = null;</span>
+<span class="nc bnc" id="L29" title="All 4 branches missed.">        switch(type){</span>
+            case 0:
+                //setting a stone on board
+<span class="nc" id="L32">                stone = muehleGame.getStones().getNextNotsetStone(color);</span>
+                //searching randomly for a free cell
+<span class="nc" id="L34">                Cell cell = randomFreeCell();</span>
+                //creating move to set stone on free cell
+<span class="nc" id="L36">                move = new Move(stone,cell);</span>
+<span class="nc" id="L37">                break;</span>
+            case 1:
+                //moving a stone on the board
+<span class="nc" id="L40">                break;</span>
+            case 2:
+                //defeat an enemy stone
+<span class="nc" id="L43">                stone = getRandomNotProtectedEnemyStone();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">                if(stone!=null){</span>
+<span class="nc" id="L45">                    move = new Move(stone,null);</span>
+                }
+                break;
+        }
+<span class="nc" id="L49">        return move;</span>
+    }
+    
+    /**
+     * detemernise which type of move has to be made:
+     * - set a stone
+     * - move a stone
+     * - defeat a stone
+     * @return int (0=set, 1=move, 2=defeat)
+     */
+    private int getTypeOfMove(){
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if(muehleGame.getStones().getNotsetStones(color).size()&gt;0){</span>
+            //if Size of notsetStones is &gt;0 stones have to be set on the board
+<span class="nc" id="L62">            return 0;</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        }else if(muehleGame.isSecond_move()){</span>
+            //if second_move is true, an enemy stone has to be defeated
+<span class="nc" id="L65">            return 2;</span>
+        }else{
+            //all other cases, a stone has to be moved
+<span class="nc" id="L68">            return 1;</span>
+        }        
+    }
+    
+    /**
+     * searches all cells randomly for a free cell
+     * @return free cell
+     */
+    private Cell randomFreeCell(){
+<span class="nc" id="L77">        Random rnd = new Random();</span>
+<span class="nc" id="L78">        Cell cell = null;</span>
+<span class="nc" id="L79">        boolean freeCellFound = false;</span>
+        do{
+<span class="nc" id="L81">            int rnd_i = rnd.nextInt(24);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if(muehleGame.getBoard().getAllCells().get(rnd_i).getStoneColor()==0){</span>
+<span class="nc" id="L83">                cell = muehleGame.getBoard().getAllCells().get(rnd_i);</span>
+<span class="nc" id="L84">                freeCellFound = true;</span>
+            }
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        }while(!freeCellFound);</span>
+<span class="nc" id="L87">        return cell;</span>
+    }
+
+    /**
+     * searches enemy stones for a not protected
+     * @return 
+     */
+    private Stone getRandomNotProtectedEnemyStone() {
+<span class="nc" id="L95">        Random rnd = new Random();</span>
+<span class="nc" id="L96">        ArrayList&lt;Stone&gt; notProtected = muehleGame.getStones().getNotProtectedStones(color);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if(notProtected.size()==0){</span>
+<span class="nc" id="L98">            System.out.println(&quot;No stone not protected&quot;);</span>
+<span class="nc" id="L99">            return null;</span>
+        }else{
+<span class="nc" id="L101">            int rnd_int = rnd.nextInt(notProtected.size());</span>
+<span class="nc" id="L102">            return notProtected.get(rnd_int);    </span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

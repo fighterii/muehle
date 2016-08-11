@@ -101,11 +101,11 @@ public class Muehle implements Runnable {
         do{
 <span class="fc" id="L102">                current_move = this.activePlayer.getMove();</span>
 <span class="pc" id="L103">                try {Thread.sleep(100);} catch (InterruptedException e) {}</span>
-<span class="pc bpc" id="L104" title="2 of 4 branches missed.">                if( current_move != null &amp;&amp; this.moveValidator.isValidMove(current_move) ){</span>
+<span class="pc bpc" id="L104" title="1 of 4 branches missed.">                if( current_move != null &amp;&amp; this.moveValidator.isValidMove(current_move) ){</span>
 <span class="fc" id="L105">                        break;</span>
-<span class="nc bnc" id="L106" title="All 4 branches missed.">                }else if( current_move != null &amp;&amp; !this.moveValidator.isValidMove(current_move)){</span>
-<span class="nc" id="L107">                        System.out.println(&quot;provided move was invalid: &quot;+current_move);</span>
-<span class="nc" id="L108">                        System.exit(0);</span>
+<span class="pc bpc" id="L106" title="2 of 4 branches missed.">                }else if( current_move != null &amp;&amp; !this.moveValidator.isValidMove(current_move)){</span>
+<span class="fc" id="L107">                        System.out.println(&quot;provided move was invalid: &quot;+current_move);</span>
+<span class="fc" id="L108">                        throw new IllegalStateException(&quot;provided move was invalid&quot;);</span>
                 }
 <span class="nc bnc" id="L110" title="All 2 branches missed.">        }while(current_move == null);</span>
         

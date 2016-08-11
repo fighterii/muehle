@@ -39,8 +39,8 @@ public class CellTest {
     public void testGetNeighbors() {
         System.out.println("getNeighbors");
         Cell instance = new Cell(new Coord(0,0));
-        Cell cell_east = new Cell(new Coord(1,0));
-        Cell cell_south = new Cell(new Coord(0,1));
+        Cell cell_east = new Cell(new Coord(3,0));
+        Cell cell_south = new Cell(new Coord(0,3));
         Cell[] neighbors = new Cell[4];
         Cell[] expResult = neighbors;
         Cell[] result = instance.getNeighbors();

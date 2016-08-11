@@ -66,16 +66,20 @@ public class Console implements IPlayerHandler{
             try{
                 index = Integer.parseInt(parts[0]);
             }catch(NumberFormatException e){
+                System.out.println("Failed to parse first part of Input");
                 index = 100;
             }
-            if(index>0&index<24){
-                source = muehleGame.getBoard().getAllCells().get(index);
+            if(index>=0&index<24){
+                source = muehleGame.getBoard().getListAllCells().get(index);
                 stone = muehleGame.getStones().getStoneOnPos(source);
+                if(stone==null){
+                    System.out.println("Kein Stein auf Zelle gefunden");
+                }
             }else{
                 System.out.println("Ungültige Source-Zelle "+index);
             }
         }
-        if(parts[1]=="defeat"){
+        if(parts[1].contentEquals("defeat")){
             //defeating stone
             move = new Move(stone,null);
         }else{
@@ -84,10 +88,11 @@ public class Console implements IPlayerHandler{
             try{
                 index = Integer.parseInt(parts[1]);
             }catch(NumberFormatException e){
+                System.out.println("Failed to parse second part of Input");
                 index = 100;
             }
-            if(index>0&index<24){
-                target = muehleGame.getBoard().getAllCells().get(index);
+            if(index>=0&index<24){
+                target = muehleGame.getBoard().getListAllCells().get(index);
             }else{
                 System.out.println("Ungültige Ziel-Zelle "+index);
             }
@@ -112,26 +117,28 @@ public class Console implements IPlayerHandler{
     }
 
     private void printBoard() {
-        ArrayList<Cell> allCells = muehleGame.getBoard().getAllCells();
-        ArrayList<String> allCellsString = new ArrayList();
-        for(int i=0;i<allCells.size();i++){
-            if(allCells.get(i).getStoneColor()==0){
-                //cell is free
-                allCellsString.add("o");
-            }else if(allCells.get(i).getStoneColor()==1){
-                //white cell
-                allCellsString.add("W");
-            }else{
-                allCellsString.add("B");
+        Cell[][] allCells = muehleGame.getBoard().getAllCells();
+        //loop over rows first to print lines
+        for(int j=0;j<7;j++){
+            String string ="";
+            for(int i=0;i<7;i++){
+                Cell cell = allCells[i][j]; 
+                if(((i==0)|(i==6))&(cell==null)){
+                    string = string+" | ";
+                }else if(((i==1)|(i==5))&(cell==null)&((j==2)|(j==4))){
+                    string = string+" | ";
+                }else if(cell==null){
+                    string = string +"---";
+                }else if(cell.getStoneColor()==0){
+                    string = string + " o ";
+                }else if(cell.getStoneColor()==1){
+                    string = string + " W ";
+                }else if(cell.getStoneColor()==2){
+                    string = string + " B ";
+                }
             }
+            System.out.println(string);
         }
-        System.out.println(allCellsString.get(0) +" - - "+allCellsString.get(1)+" - - "+allCellsString.get(2));
-        System.out.println("| "+allCellsString.get(8)+" - "+allCellsString.get(9)+" - "+allCellsString.get(10)+ " |");
-        System.out.println("| | "+allCellsString.get(16) + " " + allCellsString.get(17) + " " + allCellsString.get(18) + " | |");
-        System.out.println(allCellsString.get(3) +" " + allCellsString.get(11) + " " + allCellsString.get(19) + "   "+ allCellsString.get(20) + " " + allCellsString.get(12) + " " + allCellsString.get(4));
-        System.out.println("| | "+allCellsString.get(21) + " " + allCellsString.get(22) + " " + allCellsString.get(23) + " | |");
-        System.out.println("| "+allCellsString.get(13)+" - "+allCellsString.get(14)+" - "+allCellsString.get(15)+ " |");
-        System.out.println(allCellsString.get(5) +" - - "+allCellsString.get(6)+" - - "+allCellsString.get(7));
     }
     
 }
