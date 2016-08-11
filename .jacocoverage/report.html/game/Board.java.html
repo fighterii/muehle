@@ -12,67 +12,101 @@ public class Board {
      * and provides information about all possible combinations of 3 cells which
      * form a muehle
      */
-    private final ArrayList&lt;Cell[][]&gt; circles;
-    private final ArrayList&lt;Cell[]&gt; list_possible_muehle;
-    private final ArrayList&lt;Cell&gt; list_allcells;
+    private final ArrayList&lt;Cell[]&gt; listPossibleMuehle;
+    private final Cell[][] allCellsGrid;
+    private final ArrayList&lt;Cell&gt; listAllCells;
 
 <span class="fc" id="L19">    public Board(){</span>
-        //3 circles, each with 3*3-1=8 positions
-<span class="fc" id="L21">        circles = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L22">        createCircles();</span>
-<span class="fc" id="L23">        list_possible_muehle = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L24">        list_allcells = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L25">        allCells();</span>
-<span class="fc" id="L26">        setNeighbors();</span>
-<span class="fc" id="L27">        setPossibleMuehle();</span>
-<span class="fc" id="L28">        System.out.println(&quot;Board initialized&quot;);</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L20">        allCellsGrid = new Cell[7][7];</span>
+<span class="fc" id="L21">        listPossibleMuehle = new ArrayList();</span>
+<span class="fc" id="L22">        listAllCells = new ArrayList();;</span>
+<span class="fc" id="L23">        allCells();</span>
+<span class="fc" id="L24">        initializeNeighbors();</span>
+<span class="fc" id="L25">        setPossibleMuehle();</span>
+<span class="fc" id="L26">        System.out.println(&quot;Board initialized&quot;);</span>
+<span class="fc" id="L27">    }</span>
 
-    //createCircle creates the 8 Cells for one Circle
-    private void createCircles() {
-<span class="fc bfc" id="L33" title="All 2 branches covered.">        for(int i=0;i&lt;3;i++){</span>
-<span class="fc" id="L34">            Cell[][] circle = new Cell[3][3];</span>
-<span class="fc bfc" id="L35" title="All 2 branches covered.">            for(int x=0;x&lt;3;x++){</span>
-<span class="fc bfc" id="L36" title="All 2 branches covered.">                for(int y=0;y&lt;3;y++){</span>
-<span class="fc bfc" id="L37" title="All 6 branches covered.">                    if((x!=1)|(y!=1)){</span>
-<span class="fc" id="L38">                        circle[x][y] = new Cell(new Coord(x,y));</span>
-                    }
-                }
-            } 
-<span class="fc" id="L42">            circles.add(circle);</span>
-        }
-<span class="fc" id="L44">    }</span>
     /**
      * allCells lists all cells according to the following pattern
      * (outer circle - middle circle - inner circle)
      */
     private void allCells(){
-        /*
-        allcells:
-        00  .  .  01  .  .  02
-        .  08  .  09  .  10  .
-        .  .  16  17  18  .  .
-        03 11 19  .   20 12 04
-        .  .  21  22  23  .  .       
-        .  13  .  14  .  15  . 
-        05  .  .  06  .  .  07        
-        */
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        for(int i=0;i&lt;3;i++){</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">            for(int y=0;y&lt;3;y++){</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">                for(int x=0;x&lt;3;x++){</span>
-<span class="fc bfc" id="L63" title="All 6 branches covered.">                    if((x!=1)|(y!=1)){</span>
-<span class="fc" id="L64">                        list_allcells.add(circles.get(i)[x][y]);    </span>
-                    }
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        for(int i=0;i&lt;8;i++){</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            for(int j=0;j&lt;8;j++){</span>
+<span class="fc" id="L36">                Coord coord = new Coord(i,j);           </span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">                if(coord.isValidPos()){</span>
+<span class="fc" id="L38">                    Cell cell = new Cell(coord);</span>
+<span class="fc" id="L39">                    allCellsGrid[i][j] = cell;</span>
+                    //System.out.println(cell+&quot; &quot;+listAllCells.size()+&quot; added to grid and list&quot;);
+<span class="fc" id="L41">                    listAllCells.add(cell);</span>
+                    
                 }
             }
         }
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L46">    }</span>
     /**
-     * sets all neighbors for every cell
-     * ugly to do it manually, but hard to automate
+     * searches the GridArray of Cells for a neighbor in the north
+     * @param column of the actual cell
+     * @param row row of the actual cell
+     * @return neighbor in the north, null if no neighbor
      */
-    private void setNeighbors(){
-        
+    private Cell findNeighborNorth(int column, int row){
+<span class="fc" id="L54">        Cell cell = null;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for(int i=row-1;i&gt;=0;i--){</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if(allCellsGrid[column][i]!=null){</span>
+                //System.out.println(&quot;Neighbor in the north found&quot;);
+<span class="fc" id="L58">                return allCellsGrid[column][i];</span>
+            }
+        }
+        //System.out.println(&quot;No Neighbor in the north found&quot;);
+<span class="fc" id="L62">        return cell;</span>
+    }
+     /**
+     * searches the GridArray of Cells for a neighbor in the south
+     * @param column of the actual cell
+     * @param row row of the actual cell
+     * @return neighbor in the south, null if no neighbor
+     */
+    private Cell findNeighborSouth(int column, int row){
+<span class="fc" id="L71">        Cell cell = null;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for(int i=row+1;i&lt;7;i++){</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            if(allCellsGrid[column][i]!=null){</span>
+<span class="fc" id="L74">                return allCellsGrid[column][i];</span>
+            }
+        }
+<span class="fc" id="L77">        return cell;</span>
+    }
+     /**
+     * searches the GridArray of Cells for a neighbor in the east
+     * @param column of the actual cell
+     * @param row row of the actual cell
+     * @return neighbor in the east, null if no neighbor
+     */
+    private Cell findNeighborEast(int column, int row){
+<span class="fc" id="L86">        Cell cell = null;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        for(int i=column-1;i&gt;=0;i--){</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if(allCellsGrid[i][row]!=null){</span>
+<span class="fc" id="L89">                return allCellsGrid[i][row];</span>
+            }
+        }
+<span class="fc" id="L92">        return cell;</span>
+    }
+    /**
+     * searches the GridArray of Cells for a neighbor in the west
+     * @param column of the actual cell
+     * @param row row of the actual cell
+     * @return neighbor in the west, null if no neighbor
+     */
+    private Cell findNeighborWest(int column, int row){
+<span class="fc" id="L101">        Cell cell = null;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        for(int i=column+1;i&lt;7;i++){</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">            if(allCellsGrid[i][row]!=null){</span>
+<span class="fc" id="L104">                return allCellsGrid[i][row];</span>
+            }
+        }
+<span class="fc" id="L107">        return cell;</span>
+    }
+    private void initializeNeighbors(){
         /*initalizing Vector of neighbors.
              * positions as following:
              * x 0 x
@@ -81,167 +115,47 @@ public class Board {
              * 
              * every cell has 4 possible neighbors (0-3)
         */
-        //Cell0
-<span class="fc" id="L85">        Cell[] neighbors = new Cell[4];</span>
-<span class="fc" id="L86">        neighbors[2] = list_allcells.get(1);</span>
-<span class="fc" id="L87">        neighbors[3] = list_allcells.get(3);</span>
-<span class="fc" id="L88">        list_allcells.get(0).setNeighbors(neighbors);</span>
-        //Cell1
-<span class="fc" id="L90">        neighbors = new Cell[4];</span>
-<span class="fc" id="L91">        neighbors[1] = list_allcells.get(0);</span>
-<span class="fc" id="L92">        neighbors[2] = list_allcells.get(2);</span>
-<span class="fc" id="L93">        neighbors[3] = list_allcells.get(9);</span>
-<span class="fc" id="L94">        list_allcells.get(1).setNeighbors(neighbors);</span>
-        //Cell2
-<span class="fc" id="L96">        neighbors = new Cell[4];</span>
-<span class="fc" id="L97">        neighbors[1] = list_allcells.get(1);</span>
-<span class="fc" id="L98">        neighbors[3] = list_allcells.get(4);</span>
-<span class="fc" id="L99">        list_allcells.get(2).setNeighbors(neighbors);</span>
-        //Cell3
-<span class="fc" id="L101">        neighbors = new Cell[4];</span>
-<span class="fc" id="L102">        neighbors[0] = list_allcells.get(0);</span>
-<span class="fc" id="L103">        neighbors[2] = list_allcells.get(11);</span>
-<span class="fc" id="L104">        neighbors[3] = list_allcells.get(5);</span>
-<span class="fc" id="L105">        list_allcells.get(3).setNeighbors(neighbors);</span>
-        //Cell4
-<span class="fc" id="L107">        neighbors = new Cell[4];</span>
-<span class="fc" id="L108">        neighbors[0] = list_allcells.get(2);</span>
-<span class="fc" id="L109">        neighbors[1] = list_allcells.get(12);</span>
-<span class="fc" id="L110">        neighbors[3] = list_allcells.get(7);</span>
-<span class="fc" id="L111">        list_allcells.get(4).setNeighbors(neighbors);</span>
-        //Cell5
-<span class="fc" id="L113">        neighbors = new Cell[4];</span>
-<span class="fc" id="L114">        neighbors[0] = list_allcells.get(3);</span>
-<span class="fc" id="L115">        neighbors[2] = list_allcells.get(6);</span>
-<span class="fc" id="L116">        list_allcells.get(5).setNeighbors(neighbors);</span>
-        //Cell6
-<span class="fc" id="L118">        neighbors = new Cell[4];</span>
-<span class="fc" id="L119">        neighbors[0] = list_allcells.get(14);</span>
-<span class="fc" id="L120">        neighbors[1] = list_allcells.get(5);</span>
-<span class="fc" id="L121">        neighbors[2] = list_allcells.get(7);</span>
-<span class="fc" id="L122">        list_allcells.get(6).setNeighbors(neighbors);</span>
-        //Cell7
-<span class="fc" id="L124">        neighbors = new Cell[4];</span>
-<span class="fc" id="L125">        neighbors[0] = list_allcells.get(4);</span>
-<span class="fc" id="L126">        neighbors[1] = list_allcells.get(6);</span>
-<span class="fc" id="L127">        list_allcells.get(7).setNeighbors(neighbors);</span>
-        //Cell8
-<span class="fc" id="L129">        neighbors = new Cell[4];</span>
-<span class="fc" id="L130">        neighbors[2] = list_allcells.get(9);</span>
-<span class="fc" id="L131">        neighbors[3] = list_allcells.get(11);</span>
-<span class="fc" id="L132">        list_allcells.get(8).setNeighbors(neighbors);</span>
-        //Cell9
-<span class="fc" id="L134">        neighbors = new Cell[4];</span>
-<span class="fc" id="L135">        neighbors[0] = list_allcells.get(1);</span>
-<span class="fc" id="L136">        neighbors[1] = list_allcells.get(8);</span>
-<span class="fc" id="L137">        neighbors[2] = list_allcells.get(10);</span>
-<span class="fc" id="L138">        neighbors[3] = list_allcells.get(17);</span>
-<span class="fc" id="L139">        list_allcells.get(9).setNeighbors(neighbors);</span>
-        //Cell10
-<span class="fc" id="L141">        neighbors = new Cell[4];</span>
-<span class="fc" id="L142">        neighbors[1] = list_allcells.get(9);</span>
-<span class="fc" id="L143">        neighbors[3] = list_allcells.get(12);</span>
-<span class="fc" id="L144">        list_allcells.get(10).setNeighbors(neighbors);</span>
-        //Cell11
-<span class="fc" id="L146">        neighbors = new Cell[4];</span>
-<span class="fc" id="L147">        neighbors[0] = list_allcells.get(8);</span>
-<span class="fc" id="L148">        neighbors[1] = list_allcells.get(3);</span>
-<span class="fc" id="L149">        neighbors[2] = list_allcells.get(19);</span>
-<span class="fc" id="L150">        neighbors[3] = list_allcells.get(13);</span>
-<span class="fc" id="L151">        list_allcells.get(11).setNeighbors(neighbors);</span>
-        //Cell12
-<span class="fc" id="L153">        neighbors = new Cell[4];</span>
-<span class="fc" id="L154">        neighbors[0] = list_allcells.get(10);</span>
-<span class="fc" id="L155">        neighbors[1] = list_allcells.get(20);</span>
-<span class="fc" id="L156">        neighbors[2] = list_allcells.get(4);</span>
-<span class="fc" id="L157">        neighbors[3] = list_allcells.get(15);</span>
-<span class="fc" id="L158">        list_allcells.get(12).setNeighbors(neighbors);</span>
-        //Cell13
-<span class="fc" id="L160">        neighbors = new Cell[4];</span>
-<span class="fc" id="L161">        neighbors[0] = list_allcells.get(11);</span>
-<span class="fc" id="L162">        neighbors[2] = list_allcells.get(14);</span>
-<span class="fc" id="L163">        list_allcells.get(13).setNeighbors(neighbors);</span>
-        //Cell14
-<span class="fc" id="L165">        neighbors = new Cell[4];</span>
-<span class="fc" id="L166">        neighbors[0] = list_allcells.get(22);</span>
-<span class="fc" id="L167">        neighbors[1] = list_allcells.get(13);</span>
-<span class="fc" id="L168">        neighbors[2] = list_allcells.get(15);</span>
-<span class="fc" id="L169">        neighbors[3] = list_allcells.get(6);</span>
-<span class="fc" id="L170">        list_allcells.get(14).setNeighbors(neighbors);</span>
-        //Cell15
-<span class="fc" id="L172">        neighbors = new Cell[4];</span>
-<span class="fc" id="L173">        neighbors[0] = list_allcells.get(12);</span>
-<span class="fc" id="L174">        neighbors[1] = list_allcells.get(14);</span>
-<span class="fc" id="L175">        list_allcells.get(15).setNeighbors(neighbors);</span>
-        //Cell16
-<span class="fc" id="L177">        neighbors = new Cell[4];</span>
-<span class="fc" id="L178">        neighbors[2] = list_allcells.get(17);</span>
-<span class="fc" id="L179">        neighbors[3] = list_allcells.get(19);</span>
-<span class="fc" id="L180">        list_allcells.get(16).setNeighbors(neighbors);</span>
-        //Cell17
-<span class="fc" id="L182">        neighbors = new Cell[4];</span>
-<span class="fc" id="L183">        neighbors[0] = list_allcells.get(9);</span>
-<span class="fc" id="L184">        neighbors[1] = list_allcells.get(16);</span>
-<span class="fc" id="L185">        neighbors[2] = list_allcells.get(18);</span>
-<span class="fc" id="L186">        list_allcells.get(17).setNeighbors(neighbors);</span>
-        //Cell18
-<span class="fc" id="L188">        neighbors = new Cell[4];</span>
-<span class="fc" id="L189">        neighbors[1] = list_allcells.get(17);</span>
-<span class="fc" id="L190">        neighbors[3] = list_allcells.get(20);</span>
-<span class="fc" id="L191">        list_allcells.get(18).setNeighbors(neighbors);</span>
-        //Cell19
-<span class="fc" id="L193">        neighbors = new Cell[4];</span>
-<span class="fc" id="L194">        neighbors[0] = list_allcells.get(16);</span>
-<span class="fc" id="L195">        neighbors[1] = list_allcells.get(11);</span>
-<span class="fc" id="L196">        neighbors[3] = list_allcells.get(21);</span>
-<span class="fc" id="L197">        list_allcells.get(19).setNeighbors(neighbors);</span>
-        //Cell20
-<span class="fc" id="L199">        neighbors = new Cell[4];</span>
-<span class="fc" id="L200">        neighbors[0] = list_allcells.get(18);</span>
-<span class="fc" id="L201">        neighbors[2] = list_allcells.get(12);</span>
-<span class="fc" id="L202">        neighbors[3] = list_allcells.get(23);</span>
-<span class="fc" id="L203">        list_allcells.get(20).setNeighbors(neighbors);</span>
-        //Cell21
-<span class="fc" id="L205">        neighbors = new Cell[4];</span>
-<span class="fc" id="L206">        neighbors[0] = list_allcells.get(19);</span>
-<span class="fc" id="L207">        neighbors[2] = list_allcells.get(22);</span>
-<span class="fc" id="L208">        list_allcells.get(21).setNeighbors(neighbors);</span>
-        //Cell22
-<span class="fc" id="L210">        neighbors = new Cell[4];</span>
-<span class="fc" id="L211">        neighbors[1] = list_allcells.get(21);</span>
-<span class="fc" id="L212">        neighbors[2] = list_allcells.get(23);</span>
-<span class="fc" id="L213">        neighbors[3] = list_allcells.get(14);</span>
-<span class="fc" id="L214">        list_allcells.get(22).setNeighbors(neighbors);</span>
-        //Cell23
-<span class="fc" id="L216">        neighbors = new Cell[4];</span>
-<span class="fc" id="L217">        neighbors[0] = list_allcells.get(20);</span>
-<span class="fc" id="L218">        neighbors[1] = list_allcells.get(22);</span>
-<span class="fc" id="L219">        list_allcells.get(23).setNeighbors(neighbors);</span>
-        /*
-        //Template: CellX
-        neighbors = new Cell[4];
-        neighbors[0] = allcells.get(X);
-        neighbors[1] = allcells.get(X);
-        neighbors[2] = allcells.get(X);
-        neighbors[3] = allcells.get(X);
-        allcells.get(X).setNeighbors(neighbors);
-        */
-<span class="fc" id="L229">    }</span>
-  
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        for(int i=0;i&lt;7;i++){</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            for(int j=0;j&lt;7;j++){</span>
+<span class="fc" id="L120">                Cell cell = allCellsGrid[i][j];</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                if(cell!=null){</span>
+<span class="fc" id="L122">                    Cell[] neighbors = new Cell[4];</span>
+<span class="fc" id="L123">                    neighbors[0] = findNeighborNorth(i,j);</span>
+<span class="fc" id="L124">                    neighbors[1] = findNeighborEast(i,j);</span>
+<span class="fc" id="L125">                    neighbors[2] = findNeighborWest(i,j);</span>
+<span class="fc" id="L126">                    neighbors[3] = findNeighborSouth(i,j);</span>
+                    
+<span class="fc" id="L128">                    cell.setNeighbors(neighbors);  </span>
+                }
+            }
+        }
+<span class="fc" id="L132">    }</span>
+      
     /**
      *
-     * @return a list of all cells
-     * index as following:
-     *  00  .  .  01  .  .  02
-        .  08  .  09  .  10  .
-        .  .  16  17  18  .  .
-        03 11 19  .   20 12 04
-        .  .  21  22  23  .  .       
-        .  13  .  14  .  15  . 
-        05  .  .  06  .  .  07      
+     * @return an Array of all cells
+     * first index = column
+     * second index = row
+     * 
      */
-    public ArrayList&lt;Cell&gt; getAllCells(){
-<span class="fc" id="L244">        return list_allcells;</span>
+    public Cell[][] getAllCells(){
+<span class="fc" id="L142">        return allCellsGrid;</span>
+    }
+    
+    /**
+     * @return list of allCells
+     *   allcells:
+     *	0   1  2  3  4   5   6
+     *0 00--------09--------21
+     *1 |  03-----10-----18  |
+     *2 |  |  06--11--15  |  |
+     *3 01-04-07      16-19-22
+     *4 |  |  08--12--17  |  |       
+     *5 |  05-----13-----20  | 
+     *6 02--------14--------23        
+     */
+    public ArrayList&lt;Cell&gt; getListAllCells(){
+<span class="fc" id="L158">        return listAllCells;</span>
     }
 
     /**
@@ -249,120 +163,109 @@ public class Board {
      * ugly to do it manually, but hard to automate
      */
     private void setPossibleMuehle() {
-<span class="fc" id="L252">        Cell[] possible_muehle = new Cell[3];</span>
-<span class="fc" id="L253">        possible_muehle[0] = list_allcells.get(0);</span>
-<span class="fc" id="L254">        possible_muehle[1] = list_allcells.get(1);</span>
-<span class="fc" id="L255">        possible_muehle[2] = list_allcells.get(2);</span>
-<span class="fc" id="L256">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L166">        Cell[] possible_muehle = new Cell[3];</span>
+<span class="fc" id="L167">        possible_muehle[0] = allCellsGrid[0][0];</span>
+<span class="fc" id="L168">        possible_muehle[1] = allCellsGrid[3][0];</span>
+<span class="fc" id="L169">        possible_muehle[2] = allCellsGrid[6][0];</span>
+<span class="fc" id="L170">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L258">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L259">        possible_muehle[0] = list_allcells.get(8);</span>
-<span class="fc" id="L260">        possible_muehle[1] = list_allcells.get(9);</span>
-<span class="fc" id="L261">        possible_muehle[2] = list_allcells.get(10);</span>
-<span class="fc" id="L262">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L172">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L173">        possible_muehle[0] = allCellsGrid[1][1];</span>
+<span class="fc" id="L174">        possible_muehle[1] = allCellsGrid[3][1];</span>
+<span class="fc" id="L175">        possible_muehle[2] = allCellsGrid[5][1];</span>
+<span class="fc" id="L176">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L264">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L265">        possible_muehle[0] = list_allcells.get(16);</span>
-<span class="fc" id="L266">        possible_muehle[1] = list_allcells.get(17);</span>
-<span class="fc" id="L267">        possible_muehle[2] = list_allcells.get(18);</span>
-<span class="fc" id="L268">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L178">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L179">        possible_muehle[0] = allCellsGrid[2][2];</span>
+<span class="fc" id="L180">        possible_muehle[1] = allCellsGrid[3][2];</span>
+<span class="fc" id="L181">        possible_muehle[2] = allCellsGrid[4][2];</span>
+<span class="fc" id="L182">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L270">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L271">        possible_muehle[0] = list_allcells.get(3);</span>
-<span class="fc" id="L272">        possible_muehle[1] = list_allcells.get(11);</span>
-<span class="fc" id="L273">        possible_muehle[2] = list_allcells.get(19);</span>
-<span class="fc" id="L274">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L184">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L185">        possible_muehle[0] = allCellsGrid[0][3];</span>
+<span class="fc" id="L186">        possible_muehle[1] = allCellsGrid[1][3];</span>
+<span class="fc" id="L187">        possible_muehle[2] = allCellsGrid[2][3];</span>
+<span class="fc" id="L188">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L276">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L277">        possible_muehle[0] = list_allcells.get(20);</span>
-<span class="fc" id="L278">        possible_muehle[1] = list_allcells.get(12);</span>
-<span class="fc" id="L279">        possible_muehle[2] = list_allcells.get(4);</span>
-<span class="fc" id="L280">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L190">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L191">        possible_muehle[0] = allCellsGrid[4][3];</span>
+<span class="fc" id="L192">        possible_muehle[1] = allCellsGrid[5][3];</span>
+<span class="fc" id="L193">        possible_muehle[2] = allCellsGrid[6][3];</span>
+<span class="fc" id="L194">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L282">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L283">        possible_muehle[0] = list_allcells.get(21);</span>
-<span class="fc" id="L284">        possible_muehle[1] = list_allcells.get(22);</span>
-<span class="fc" id="L285">        possible_muehle[2] = list_allcells.get(23);</span>
-<span class="fc" id="L286">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L196">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L197">        possible_muehle[0] = allCellsGrid[2][4];</span>
+<span class="fc" id="L198">        possible_muehle[1] = allCellsGrid[3][4];</span>
+<span class="fc" id="L199">        possible_muehle[2] = allCellsGrid[4][4];</span>
+<span class="fc" id="L200">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L288">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L289">        possible_muehle[0] = list_allcells.get(13);</span>
-<span class="fc" id="L290">        possible_muehle[1] = list_allcells.get(14);</span>
-<span class="fc" id="L291">        possible_muehle[2] = list_allcells.get(15);</span>
-<span class="fc" id="L292">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L202">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L203">        possible_muehle[0] = allCellsGrid[1][5];</span>
+<span class="fc" id="L204">        possible_muehle[1] = allCellsGrid[3][5];</span>
+<span class="fc" id="L205">        possible_muehle[2] = allCellsGrid[5][5];</span>
+<span class="fc" id="L206">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L294">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L295">        possible_muehle[0] = list_allcells.get(5);</span>
-<span class="fc" id="L296">        possible_muehle[1] = list_allcells.get(6);</span>
-<span class="fc" id="L297">        possible_muehle[2] = list_allcells.get(7);</span>
-<span class="fc" id="L298">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L208">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L209">        possible_muehle[0] = allCellsGrid[0][6];</span>
+<span class="fc" id="L210">        possible_muehle[1] = allCellsGrid[3][6];</span>
+<span class="fc" id="L211">        possible_muehle[2] = allCellsGrid[6][6];</span>
+<span class="fc" id="L212">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L300">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L301">        possible_muehle[0] = list_allcells.get(0);</span>
-<span class="fc" id="L302">        possible_muehle[1] = list_allcells.get(3);</span>
-<span class="fc" id="L303">        possible_muehle[2] = list_allcells.get(5);</span>
-<span class="fc" id="L304">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L214">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L215">        possible_muehle[0] = allCellsGrid[0][0];</span>
+<span class="fc" id="L216">        possible_muehle[1] = allCellsGrid[0][3];</span>
+<span class="fc" id="L217">        possible_muehle[2] = allCellsGrid[0][6];</span>
+<span class="fc" id="L218">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L306">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L307">        possible_muehle[0] = list_allcells.get(8);</span>
-<span class="fc" id="L308">        possible_muehle[1] = list_allcells.get(11);</span>
-<span class="fc" id="L309">        possible_muehle[2] = list_allcells.get(13);</span>
-<span class="fc" id="L310">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L220">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L221">        possible_muehle[0] = allCellsGrid[1][1];</span>
+<span class="fc" id="L222">        possible_muehle[1] = allCellsGrid[1][3];</span>
+<span class="fc" id="L223">        possible_muehle[2] = allCellsGrid[1][5];</span>
+<span class="fc" id="L224">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L312">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L313">        possible_muehle[0] = list_allcells.get(16);</span>
-<span class="fc" id="L314">        possible_muehle[1] = list_allcells.get(19);</span>
-<span class="fc" id="L315">        possible_muehle[2] = list_allcells.get(21);</span>
-<span class="fc" id="L316">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L226">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L227">        possible_muehle[0] = allCellsGrid[2][2];</span>
+<span class="fc" id="L228">        possible_muehle[1] = allCellsGrid[2][3];</span>
+<span class="fc" id="L229">        possible_muehle[2] = allCellsGrid[2][4];</span>
+<span class="fc" id="L230">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L318">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L319">        possible_muehle[0] = list_allcells.get(1);</span>
-<span class="fc" id="L320">        possible_muehle[1] = list_allcells.get(9);</span>
-<span class="fc" id="L321">        possible_muehle[2] = list_allcells.get(17);</span>
-<span class="fc" id="L322">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L232">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L233">        possible_muehle[0] = allCellsGrid[3][0];</span>
+<span class="fc" id="L234">        possible_muehle[1] = allCellsGrid[3][1];</span>
+<span class="fc" id="L235">        possible_muehle[2] = allCellsGrid[3][2];</span>
+<span class="fc" id="L236">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L324">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L325">        possible_muehle[0] = list_allcells.get(22);</span>
-<span class="fc" id="L326">        possible_muehle[1] = list_allcells.get(14);</span>
-<span class="fc" id="L327">        possible_muehle[2] = list_allcells.get(6);</span>
-<span class="fc" id="L328">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L238">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L239">        possible_muehle[0] = allCellsGrid[3][4];</span>
+<span class="fc" id="L240">        possible_muehle[1] = allCellsGrid[3][5];</span>
+<span class="fc" id="L241">        possible_muehle[2] = allCellsGrid[3][6];</span>
+<span class="fc" id="L242">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L330">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L331">        possible_muehle[0] = list_allcells.get(18);</span>
-<span class="fc" id="L332">        possible_muehle[1] = list_allcells.get(20);</span>
-<span class="fc" id="L333">        possible_muehle[2] = list_allcells.get(23);</span>
-<span class="fc" id="L334">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L244">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L245">        possible_muehle[0] = allCellsGrid[4][2];</span>
+<span class="fc" id="L246">        possible_muehle[1] = allCellsGrid[4][3];</span>
+<span class="fc" id="L247">        possible_muehle[2] = allCellsGrid[4][4];</span>
+<span class="fc" id="L248">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L336">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L337">        possible_muehle[0] = list_allcells.get(10);</span>
-<span class="fc" id="L338">        possible_muehle[1] = list_allcells.get(12);</span>
-<span class="fc" id="L339">        possible_muehle[2] = list_allcells.get(15);</span>
-<span class="fc" id="L340">        list_possible_muehle.add(possible_muehle);</span>
+<span class="fc" id="L250">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L251">        possible_muehle[0] = allCellsGrid[5][1];</span>
+<span class="fc" id="L252">        possible_muehle[1] = allCellsGrid[5][3];</span>
+<span class="fc" id="L253">        possible_muehle[2] = allCellsGrid[5][5];</span>
+<span class="fc" id="L254">        listPossibleMuehle.add(possible_muehle);</span>
         
-<span class="fc" id="L342">        possible_muehle = new Cell[3];</span>
-<span class="fc" id="L343">        possible_muehle[0] = list_allcells.get(2);</span>
-<span class="fc" id="L344">        possible_muehle[1] = list_allcells.get(4);</span>
-<span class="fc" id="L345">        possible_muehle[2] = list_allcells.get(7);</span>
-<span class="fc" id="L346">        list_possible_muehle.add(possible_muehle);</span>
-        /**
-         * Template:
-        
-        possible_muehle = new Cell[3];
-        possible_muehle[0] = list_allcells.get(X);
-        possible_muehle[1] = list_allcells.get(X);
-        possible_muehle[2] = list_allcells.get(X);
-        list_possible_muehle.add(possible_muehle);
-         */
-
-        
-<span class="fc" id="L358">    }</span>
+<span class="fc" id="L256">        possible_muehle = new Cell[3];</span>
+<span class="fc" id="L257">        possible_muehle[0] = allCellsGrid[6][0];</span>
+<span class="fc" id="L258">        possible_muehle[1] = allCellsGrid[6][3];</span>
+<span class="fc" id="L259">        possible_muehle[2] = allCellsGrid[6][6];</span>
+<span class="fc" id="L260">        listPossibleMuehle.add(possible_muehle);       </span>
+<span class="fc" id="L261">    }</span>
     
     /**
      *
      * @return the List of all possible Muehle, each possiblity containing 3 cells
      */
     public ArrayList&lt;Cell[]&gt; getPossibleMuehle() {
-<span class="fc" id="L365">        return list_possible_muehle;</span>
+<span class="fc" id="L268">        return listPossibleMuehle;</span>
     }
     
     

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JBoard.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Muehle&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">JBoard.java</span></div><h1>JBoard.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 by Kai Braunias
+ * 
+ */
+package gui;
+
+import java.awt.BasicStroke;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import javax.swing.JComponent;
+
+/**
+ *
+ * @author Kai
+ */
+public class JBoard extends JComponent{
+    private ArrayList&lt;int[]&gt; cellXY;
+    
+<span class="nc" id="L21">    public JBoard(ArrayList&lt;int[]&gt; cellXY){</span>
+<span class="nc" id="L22">        this.cellXY = cellXY;</span>
+<span class="nc" id="L23">        setPreferredSize(new Dimension(800, 800));</span>
+<span class="nc" id="L24">    }</span>
+    @Override
+    protected void paintComponent(Graphics g) {
+<span class="nc" id="L27">        super.paintComponent(g);</span>
+<span class="nc" id="L28">        System.out.println(&quot;Drawing Board...&quot;);</span>
+<span class="nc" id="L29">        int WIDTH = 20;</span>
+<span class="nc" id="L30">        int HEIGHT = 20;</span>
+<span class="nc" id="L31">        int STROKE = 5;</span>
+<span class="nc" id="L32">        int CENTER_COLUMN = cellXY.get(1)[0]; //cell1 is at center column</span>
+<span class="nc" id="L33">        int CENTER_ROW = cellXY.get(3)[1]; //cell3 is at center row</span>
+<span class="nc" id="L34">        Graphics2D g2 = (Graphics2D) g;</span>
+<span class="nc" id="L35">        g2.setStroke(new BasicStroke(STROKE));</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        for(int i=0;i&lt;cellXY.size();i++){</span>
+<span class="nc" id="L37">            g2.drawOval(cellXY.get(i)[0]-(WIDTH/2), cellXY.get(i)[1]-(HEIGHT/2), WIDTH, HEIGHT);</span>
+        }
+
+        //HorizontalLines
+<span class="nc" id="L41">        int OFFSET_X = WIDTH/2;</span>
+<span class="nc" id="L42">        int OFFSET_Y = 0;</span>
+                
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        for(int i=0;i&lt;cellXY.size();i++){</span>
+<span class="nc" id="L46">            int[] source_cell = cellXY.get(i);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            for(int j=i+1;j&lt;cellXY.size();j++){</span>
+<span class="nc" id="L48">                int[] target_cell = cellXY.get(j);</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">                if(source_cell[1]==target_cell[1]){</span>
+                    //exclude center row
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                    if(source_cell[1]!=CENTER_ROW){</span>
+<span class="nc" id="L52">                        drawConnectionLine(g2,i,j,OFFSET_X,OFFSET_Y);</span>
+<span class="nc" id="L53">                        break; </span>
+                    }
+                }
+            }
+        }
+        
+        //Line from 3 - 11
+<span class="nc" id="L60">        int source = 3;</span>
+<span class="nc" id="L61">        int target = 11;</span>
+<span class="nc" id="L62">        drawConnectionLine(g2,source,target,OFFSET_X,OFFSET_Y);</span>
+        //Line from 11 - 19
+<span class="nc" id="L64">        source = 11;</span>
+<span class="nc" id="L65">        target = 19;</span>
+<span class="nc" id="L66">        drawConnectionLine(g2,source,target,OFFSET_X,OFFSET_Y);</span>
+        //Line from 20 - 11
+<span class="nc" id="L68">        source = 20;</span>
+<span class="nc" id="L69">        target = 12;</span>
+<span class="nc" id="L70">        drawConnectionLine(g2,source,target,OFFSET_X,OFFSET_Y);</span>
+        //Line from 12 - 4
+<span class="nc" id="L72">        source = 12;</span>
+<span class="nc" id="L73">        target = 4;</span>
+<span class="nc" id="L74">        drawConnectionLine(g2,source,target,OFFSET_X,OFFSET_Y);</span>
+        
+        //VerticalLines
+<span class="nc" id="L77">        OFFSET_X = 0;</span>
+<span class="nc" id="L78">        OFFSET_Y = HEIGHT/2;</span>
+        
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        for(int i=0;i&lt;cellXY.size();i++){</span>
+<span class="nc" id="L81">            int[] source_cell = cellXY.get(i);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            for(int j=i+1;j&lt;cellXY.size();j++){</span>
+<span class="nc" id="L83">                int[] target_cell = cellXY.get(j);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">                if(source_cell[0]==target_cell[0]){</span>
+                    //exclude center column
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                    if(source_cell[0]!=CENTER_COLUMN){</span>
+<span class="nc" id="L87">                        drawConnectionLine(g2,i,j,OFFSET_X,OFFSET_Y);</span>
+<span class="nc" id="L88">                        break; </span>
+                    }
+                }
+            }
+        }
+        
+<span class="nc" id="L94">    }</span>
+
+    private void drawConnectionLine(Graphics2D g2, int source, int target,int OFFSET_X,int OFFSET_Y) {
+<span class="nc" id="L97">        g2.drawLine(cellXY.get(source)[0]+OFFSET_X, cellXY.get(source)[1]+OFFSET_Y, cellXY.get(target)[0]-OFFSET_X, cellXY.get(target)[1]-OFFSET_Y);</span>
+<span class="nc" id="L98">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

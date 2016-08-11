@@ -18,17 +18,18 @@ import gui.JGame;
 <span class="nc" id="L18">        Muehle muehleGame = new Muehle();</span>
 
         // then we create the clients/players
-        //JGame muehleGui = new JGame(muehleGame);
-<span class="nc" id="L22">        Console consoleGui = new Console(muehleGame);</span>
+<span class="nc" id="L21">        JGame humanPlayer = new JGame(muehleGame);</span>
+        //Console humanPlayer = new Console(muehleGame);
         
-<span class="nc" id="L24">        RandomAiPlayer ai1 = new RandomAiPlayer(muehleGame);</span>
+<span class="nc" id="L24">        RandomAiPlayer aiPlayer = new RandomAiPlayer(muehleGame);</span>
 
         // then we attach the clients/players to the game
-<span class="nc" id="L27">        muehleGame.setPlayer(1, consoleGui);</span>
-<span class="nc" id="L28">        muehleGame.setPlayer(2, ai1);</span>
+<span class="nc" id="L27">        muehleGame.setPlayer(1, humanPlayer);</span>
+<span class="nc" id="L28">        muehleGame.setPlayer(2, aiPlayer);</span>
 
         // in the end we start the game
-<span class="nc" id="L31">        new Thread(muehleGame).start();</span>
-<span class="nc" id="L32">	}    </span>
+<span class="nc" id="L31">        humanPlayer.setVisible(true);</span>
+<span class="nc" id="L32">        new Thread(muehleGame).start();</span>
+<span class="nc" id="L33">	}    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

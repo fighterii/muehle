@@ -23,30 +23,56 @@ public class RandomAiPlayer implements IPlayerHandler{
     
     @Override
     public Move getMove() {
-<span class="nc" id="L26">        int type = getTypeOfMove();</span>
-<span class="nc" id="L27">        Move move = null;</span>
-<span class="nc" id="L28">        Stone stone = null;</span>
-<span class="nc bnc" id="L29" title="All 4 branches missed.">        switch(type){</span>
+<span class="nc" id="L26">        MoveValidator moveValidator = muehleGame.getMoveValidator();</span>
+<span class="nc" id="L27">        int type = getTypeOfMove();</span>
+<span class="nc" id="L28">        Move move = null;</span>
+<span class="nc" id="L29">        Stone stone = null;</span>
+<span class="nc bnc" id="L30" title="All 4 branches missed.">        switch(type){</span>
             case 0:
                 //setting a stone on board
-<span class="nc" id="L32">                stone = muehleGame.getStones().getNextNotsetStone(color);</span>
+<span class="nc" id="L33">                stone = muehleGame.getStones().getNextNotsetStone(color);</span>
                 //searching randomly for a free cell
-<span class="nc" id="L34">                Cell cell = randomFreeCell();</span>
+<span class="nc" id="L35">                Cell cell = randomFreeCell();</span>
                 //creating move to set stone on free cell
-<span class="nc" id="L36">                move = new Move(stone,cell);</span>
-<span class="nc" id="L37">                break;</span>
+<span class="nc" id="L37">                move = new Move(stone,cell);</span>
+<span class="nc" id="L38">                break;</span>
             case 1:
                 //moving a stone on the board
-<span class="nc" id="L40">                break;</span>
+<span class="nc" id="L41">                Random rnd = new Random();</span>
+                do{
+<span class="nc" id="L43">                    int rndInt = rnd.nextInt(muehleGame.getStones().getSetStones(color).size());</span>
+<span class="nc" id="L44">                    Stone rndStone = muehleGame.getStones().getSetStones(color).get(rndInt);</span>
+<span class="nc" id="L45">                    Cell cellOfRndStone = rndStone.getPos();</span>
+<span class="nc" id="L46">                    Cell target = null;</span>
+<span class="nc" id="L47">                    int rndIntNeighbor = rnd.nextInt(4);</span>
+<span class="nc" id="L48">                    Cell neighborCell = null;</span>
+<span class="nc" id="L49">                    neighborCell = cellOfRndStone.getNeighbors()[rndIntNeighbor];</span>
+                    //get a rndNeighborCell for the rndCell
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                    if(neighborCell!=null){</span>
+                        //check if its free
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                        if(neighborCell.getStoneColor()==0){</span>
+<span class="nc" id="L54">                            target = neighborCell;</span>
+                        }
+                    }
+                    //if a free neighbor cell was found check if move is valid
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                    if(target!=null){</span>
+<span class="nc" id="L59">                        move = new Move(rndStone,target);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                        if(!moveValidator.isValidMove(move)){</span>
+                            //if not valid set move to null
+<span class="nc" id="L62">                            move=null;</span>
+                        }
+                    }
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                }while(move==null);</span>
+<span class="nc" id="L66">                break;</span>
             case 2:
                 //defeat an enemy stone
-<span class="nc" id="L43">                stone = getRandomNotProtectedEnemyStone();</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">                if(stone!=null){</span>
-<span class="nc" id="L45">                    move = new Move(stone,null);</span>
+<span class="nc" id="L69">                stone = getRandomNotProtectedEnemyStone();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                if(stone!=null){</span>
+<span class="nc" id="L71">                    move = new Move(stone,null);</span>
                 }
                 break;
         }
-<span class="nc" id="L49">        return move;</span>
+<span class="nc" id="L75">        return move;</span>
     }
     
     /**
@@ -57,15 +83,15 @@ public class RandomAiPlayer implements IPlayerHandler{
      * @return int (0=set, 1=move, 2=defeat)
      */
     private int getTypeOfMove(){
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        if(muehleGame.getStones().getNotsetStones(color).size()&gt;0){</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if(muehleGame.getStones().getNotsetStones(color).size()&gt;0){</span>
             //if Size of notsetStones is &gt;0 stones have to be set on the board
-<span class="nc" id="L62">            return 0;</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        }else if(muehleGame.isSecond_move()){</span>
+<span class="nc" id="L88">            return 0;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        }else if(muehleGame.isSecond_move()){</span>
             //if second_move is true, an enemy stone has to be defeated
-<span class="nc" id="L65">            return 2;</span>
+<span class="nc" id="L91">            return 2;</span>
         }else{
             //all other cases, a stone has to be moved
-<span class="nc" id="L68">            return 1;</span>
+<span class="nc" id="L94">            return 1;</span>
         }        
     }
     
@@ -74,17 +100,17 @@ public class RandomAiPlayer implements IPlayerHandler{
      * @return free cell
      */
     private Cell randomFreeCell(){
-<span class="nc" id="L77">        Random rnd = new Random();</span>
-<span class="nc" id="L78">        Cell cell = null;</span>
-<span class="nc" id="L79">        boolean freeCellFound = false;</span>
+<span class="nc" id="L103">        Random rnd = new Random();</span>
+<span class="nc" id="L104">        Cell cell = null;</span>
+<span class="nc" id="L105">        boolean freeCellFound = false;</span>
         do{
-<span class="nc" id="L81">            int rnd_i = rnd.nextInt(24);</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">            if(muehleGame.getBoard().getAllCells().get(rnd_i).getStoneColor()==0){</span>
-<span class="nc" id="L83">                cell = muehleGame.getBoard().getAllCells().get(rnd_i);</span>
-<span class="nc" id="L84">                freeCellFound = true;</span>
+<span class="nc" id="L107">            int rnd_i = rnd.nextInt(24);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">            if(muehleGame.getBoard().getListAllCells().get(rnd_i).getStoneColor()==0){</span>
+<span class="nc" id="L109">                cell = muehleGame.getBoard().getListAllCells().get(rnd_i);</span>
+<span class="nc" id="L110">                freeCellFound = true;</span>
             }
-<span class="nc bnc" id="L86" title="All 2 branches missed.">        }while(!freeCellFound);</span>
-<span class="nc" id="L87">        return cell;</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        }while(!freeCellFound);</span>
+<span class="nc" id="L113">        return cell;</span>
     }
 
     /**
@@ -92,14 +118,14 @@ public class RandomAiPlayer implements IPlayerHandler{
      * @return 
      */
     private Stone getRandomNotProtectedEnemyStone() {
-<span class="nc" id="L95">        Random rnd = new Random();</span>
-<span class="nc" id="L96">        ArrayList&lt;Stone&gt; notProtected = muehleGame.getStones().getNotProtectedStones(color);</span>
-<span class="nc bnc" id="L97" title="All 2 branches missed.">        if(notProtected.size()==0){</span>
-<span class="nc" id="L98">            System.out.println(&quot;No stone not protected&quot;);</span>
-<span class="nc" id="L99">            return null;</span>
+<span class="nc" id="L121">        Random rnd = new Random();</span>
+<span class="nc" id="L122">        ArrayList&lt;Stone&gt; notProtected = muehleGame.getStones().getNotProtectedStones(color);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        if(notProtected.size()==0){</span>
+<span class="nc" id="L124">            System.out.println(&quot;No stone not protected&quot;);</span>
+<span class="nc" id="L125">            return null;</span>
         }else{
-<span class="nc" id="L101">            int rnd_int = rnd.nextInt(notProtected.size());</span>
-<span class="nc" id="L102">            return notProtected.get(rnd_int);    </span>
+<span class="nc" id="L127">            int rnd_int = rnd.nextInt(notProtected.size());</span>
+<span class="nc" id="L128">            return notProtected.get(rnd_int);    </span>
         }
 
     }

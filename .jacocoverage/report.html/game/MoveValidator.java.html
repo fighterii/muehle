@@ -28,31 +28,35 @@ public class MoveValidator {
 <span class="fc" id="L28">        boolean second_move = muehleGame.isSecond_move();</span>
 <span class="fc" id="L29">        IPlayerHandler activePlayer = muehleGame.getActivePlayer();</span>
 <span class="fc" id="L30">        Stone stone = move.stone;</span>
-<span class="fc" id="L31">        Cell source = stone.getPos();</span>
-<span class="fc" id="L32">        int stone_color = stone.getColor();</span>
-<span class="fc" id="L33">        Cell target = move.target;</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if(stone==null){</span>
+            //if no stone is provided, move is invalid
+<span class="nc" id="L33">            return false;</span>
+        }
+<span class="fc" id="L35">        Cell source = stone.getPos();</span>
+<span class="fc" id="L36">        int stone_color = stone.getColor();</span>
+<span class="fc" id="L37">        Cell target = move.target;</span>
         int player_color;
-<span class="fc" id="L35">        System.out.println(&quot;ActivePlayer isValidMove:&quot; + activePlayer);</span>
-<span class="fc" id="L36">        System.out.println(&quot;blackPlayer isValidMove:&quot; + blackPlayer);</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">        if(activePlayer==this.whitePlayer){</span>
-<span class="fc" id="L38">            player_color=1;</span>
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        }else if(activePlayer==this.blackPlayer){</span>
-<span class="fc" id="L40">            player_color=2;</span>
+        //System.out.println(&quot;ActivePlayer isValidMove:&quot; + activePlayer);
+        //System.out.println(&quot;blackPlayer isValidMove:&quot; + blackPlayer);
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if(activePlayer==this.whitePlayer){</span>
+<span class="fc" id="L42">            player_color=1;</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        }else if(activePlayer==this.blackPlayer){</span>
+<span class="fc" id="L44">            player_color=2;</span>
         }else{
-<span class="nc" id="L42">            throw new IllegalStateException(&quot;Unknown activePlayer&quot;);</span>
+<span class="nc" id="L46">            throw new IllegalStateException(&quot;Unknown activePlayer&quot;);</span>
         }
         
-<span class="fc bfc" id="L45" title="All 2 branches covered.">        if(second_move){</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if(second_move){</span>
             //defeating an enemy stone
             //move has to have an enemy stone and target null
-<span class="fc bfc" id="L48" title="All 2 branches covered.">            if(stone_color!=player_color){</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">                if(target==null){</span>
-<span class="fc" id="L50">                    return true;</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if(stone_color!=player_color){</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">                if(target==null){</span>
+<span class="fc" id="L54">                    return true;</span>
                 }else{
-<span class="fc" id="L52">                    System.out.println(&quot;Unknown target for defeating a stone&quot;);</span>
+<span class="fc" id="L56">                    System.out.println(&quot;Unknown target for defeating a stone&quot;);</span>
                 }
             }else{
-<span class="fc" id="L55">                System.out.println(&quot;You have to defeat an enemy stone!&quot;);</span>
+<span class="fc" id="L59">                System.out.println(&quot;You have to defeat an enemy stone!&quot;);</span>
             }
             
         }else{
@@ -63,39 +67,39 @@ public class MoveValidator {
             //the target field has to be within the neighborhood of the current position
             
             //own stone?
-<span class="fc bfc" id="L66" title="All 2 branches covered.">            if(stone_color==player_color){</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if(stone_color==player_color){</span>
                 //check if target is specified
-<span class="fc bfc" id="L68" title="All 2 branches covered.">                if(target!=null){</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                if(target!=null){</span>
                 //target empty?
-<span class="fc bfc" id="L70" title="All 2 branches covered.">                    if(target.getStoneColor()==0){</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                    if(target.getStoneColor()==0){</span>
                         //source not empty?
-<span class="fc bfc" id="L72" title="All 2 branches covered.">                        if(source != null){</span>
-<span class="fc" id="L73">                            Cell[] neighbors = source.getNeighbors();</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">                        if(source != null){</span>
+<span class="fc" id="L77">                            Cell[] neighbors = source.getNeighbors();</span>
                             //target in the neighborhood?
-<span class="fc bfc" id="L75" title="All 2 branches covered.">                            if(cellArrayContainsCell(neighbors,target)){</span>
-<span class="fc" id="L76">                                return true;</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">                            if(cellArrayContainsCell(neighbors,target)){</span>
+<span class="fc" id="L80">                                return true;</span>
                             }else{
-<span class="fc" id="L78">                                System.out.println(&quot;Target field is not in the neighborhood of the current field&quot;);</span>
+<span class="fc" id="L82">                                System.out.println(&quot;Target field is not in the neighborhood of the current field&quot;);</span>
                             }                       
-<span class="fc" id="L80">                        }else{</span>
+<span class="fc" id="L84">                        }else{</span>
                             //source empty, target empty, colors_match
-<span class="fc" id="L82">                            return true;</span>
+<span class="fc" id="L86">                            return true;</span>
                         }
 
                     }else{
                         //Target field is not empty
-<span class="fc" id="L87">                        System.out.println(&quot;Target field is not empty!&quot;);</span>
+<span class="fc" id="L91">                        System.out.println(&quot;Target field is not empty!&quot;);</span>
                     }
                 }else{
                 //target not specified, move is invalid
-<span class="fc" id="L91">                System.out.println(&quot;Target field is not specified!&quot;);</span>
+<span class="fc" id="L95">                System.out.println(&quot;Target field is not specified!&quot;);</span>
                 }            
             }else{
                 //stone_color &amp; player_color don't match
-<span class="fc" id="L95">                System.out.println(&quot;You can only move your own stones!&quot;);</span>
+<span class="fc" id="L99">                System.out.println(&quot;You can only move your own stones!&quot;);</span>
             }
         }
-<span class="fc" id="L98">        return false;</span>
+<span class="fc" id="L102">        return false;</span>
     }
 
     /*
@@ -104,12 +108,12 @@ public class MoveValidator {
     * return true if Cell item is contained within Cell[] arr
     */
     private static boolean cellArrayContainsCell(Cell[] arr, Cell item) {
-<span class="fc bfc" id="L107" title="All 2 branches covered.">      for (Cell n : arr) {</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">         if (item == n) {</span>
-<span class="fc" id="L109">            return true;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">      for (Cell n : arr) {</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">         if (item == n) {</span>
+<span class="fc" id="L113">            return true;</span>
          }
       }
-<span class="fc" id="L112">      return false;</span>
+<span class="fc" id="L116">      return false;</span>
    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

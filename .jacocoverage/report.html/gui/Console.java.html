@@ -66,73 +66,80 @@ public class Console implements IPlayerHandler{
             try{
 <span class="nc" id="L67">                index = Integer.parseInt(parts[0]);</span>
 <span class="nc" id="L68">            }catch(NumberFormatException e){</span>
-<span class="nc" id="L69">                index = 100;</span>
-<span class="nc" id="L70">            }</span>
-<span class="nc bnc" id="L71" title="All 6 branches missed.">            if(index&gt;0&amp;index&lt;24){</span>
-<span class="nc" id="L72">                source = muehleGame.getBoard().getAllCells().get(index);</span>
-<span class="nc" id="L73">                stone = muehleGame.getStones().getStoneOnPos(source);</span>
+<span class="nc" id="L69">                System.out.println(&quot;Failed to parse first part of Input&quot;);</span>
+<span class="nc" id="L70">                index = 100;</span>
+<span class="nc" id="L71">            }</span>
+<span class="nc bnc" id="L72" title="All 6 branches missed.">            if(index&gt;=0&amp;index&lt;24){</span>
+<span class="nc" id="L73">                source = muehleGame.getBoard().getListAllCells().get(index);</span>
+<span class="nc" id="L74">                stone = muehleGame.getStones().getStoneOnPos(source);</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                if(stone==null){</span>
+<span class="nc" id="L76">                    System.out.println(&quot;Kein Stein auf Zelle gefunden&quot;);</span>
+                }
             }else{
-<span class="nc" id="L75">                System.out.println(&quot;Ungültige Source-Zelle &quot;+index);</span>
+<span class="nc" id="L79">                System.out.println(&quot;Ungültige Source-Zelle &quot;+index);</span>
             }
         }
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        if(parts[1]==&quot;defeat&quot;){</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if(parts[1].contentEquals(&quot;defeat&quot;)){</span>
             //defeating stone
-<span class="nc" id="L80">            move = new Move(stone,null);</span>
+<span class="nc" id="L84">            move = new Move(stone,null);</span>
         }else{
             //finding target cell
             int index;
             try{
-<span class="nc" id="L85">                index = Integer.parseInt(parts[1]);</span>
-<span class="nc" id="L86">            }catch(NumberFormatException e){</span>
-<span class="nc" id="L87">                index = 100;</span>
-<span class="nc" id="L88">            }</span>
-<span class="nc bnc" id="L89" title="All 6 branches missed.">            if(index&gt;0&amp;index&lt;24){</span>
-<span class="nc" id="L90">                target = muehleGame.getBoard().getAllCells().get(index);</span>
+<span class="nc" id="L89">                index = Integer.parseInt(parts[1]);</span>
+<span class="nc" id="L90">            }catch(NumberFormatException e){</span>
+<span class="nc" id="L91">                System.out.println(&quot;Failed to parse second part of Input&quot;);</span>
+<span class="nc" id="L92">                index = 100;</span>
+<span class="nc" id="L93">            }</span>
+<span class="nc bnc" id="L94" title="All 6 branches missed.">            if(index&gt;=0&amp;index&lt;24){</span>
+<span class="nc" id="L95">                target = muehleGame.getBoard().getListAllCells().get(index);</span>
             }else{
-<span class="nc" id="L92">                System.out.println(&quot;Ungültige Ziel-Zelle &quot;+index);</span>
+<span class="nc" id="L97">                System.out.println(&quot;Ungültige Ziel-Zelle &quot;+index);</span>
             }
             //moving stone
-<span class="nc" id="L95">            move = new Move(stone,target);</span>
+<span class="nc" id="L100">            move = new Move(stone,target);</span>
         }
-<span class="nc" id="L97">        return move;</span>
+<span class="nc" id="L102">        return move;</span>
     }
     @Override
     public Move getMove() {
-<span class="nc" id="L101">        Move move=null;</span>
-<span class="nc" id="L102">        moveValidator = muehleGame.getMoveValidator();</span>
-<span class="nc" id="L103">        printBoard();</span>
+<span class="nc" id="L106">        Move move=null;</span>
+<span class="nc" id="L107">        moveValidator = muehleGame.getMoveValidator();</span>
+<span class="nc" id="L108">        printBoard();</span>
         do{
-<span class="nc" id="L105">            move = getInput();</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">            if(!moveValidator.isValidMove(move)){</span>
-<span class="nc" id="L107">               System.out.println(&quot;Ungültiger Zug&quot;); </span>
+<span class="nc" id="L110">            move = getInput();</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if(!moveValidator.isValidMove(move)){</span>
+<span class="nc" id="L112">               System.out.println(&quot;Ungültiger Zug&quot;); </span>
             }
-<span class="nc bnc" id="L109" title="All 2 branches missed.">        }while(!moveValidator.isValidMove(move));</span>
-<span class="nc" id="L110">        System.out.println(&quot;Gültiger Zug gefunden&quot;);</span>
-<span class="nc" id="L111">        return move;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        }while(!moveValidator.isValidMove(move));</span>
+<span class="nc" id="L115">        System.out.println(&quot;Gültiger Zug gefunden&quot;);</span>
+<span class="nc" id="L116">        return move;</span>
     }
 
     private void printBoard() {
-<span class="nc" id="L115">        ArrayList&lt;Cell&gt; allCells = muehleGame.getBoard().getAllCells();</span>
-<span class="nc" id="L116">        ArrayList&lt;String&gt; allCellsString = new ArrayList();</span>
-<span class="nc bnc" id="L117" title="All 2 branches missed.">        for(int i=0;i&lt;allCells.size();i++){</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">            if(allCells.get(i).getStoneColor()==0){</span>
-                //cell is free
-<span class="nc" id="L120">                allCellsString.add(&quot;o&quot;);</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">            }else if(allCells.get(i).getStoneColor()==1){</span>
-                //white cell
-<span class="nc" id="L123">                allCellsString.add(&quot;W&quot;);</span>
-            }else{
-<span class="nc" id="L125">                allCellsString.add(&quot;B&quot;);</span>
+<span class="nc" id="L120">        Cell[][] allCells = muehleGame.getBoard().getAllCells();</span>
+        //loop over rows first to print lines
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        for(int j=0;j&lt;7;j++){</span>
+<span class="nc" id="L123">            String string =&quot;&quot;;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            for(int i=0;i&lt;7;i++){</span>
+<span class="nc" id="L125">                Cell cell = allCells[i][j]; </span>
+<span class="nc bnc" id="L126" title="All 8 branches missed.">                if(((i==0)|(i==6))&amp;(cell==null)){</span>
+<span class="nc" id="L127">                    string = string+&quot; | &quot;;</span>
+<span class="nc bnc" id="L128" title="All 12 branches missed.">                }else if(((i==1)|(i==5))&amp;(cell==null)&amp;((j==2)|(j==4))){</span>
+<span class="nc" id="L129">                    string = string+&quot; | &quot;;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                }else if(cell==null){</span>
+<span class="nc" id="L131">                    string = string +&quot;---&quot;;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                }else if(cell.getStoneColor()==0){</span>
+<span class="nc" id="L133">                    string = string + &quot; o &quot;;</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">                }else if(cell.getStoneColor()==1){</span>
+<span class="nc" id="L135">                    string = string + &quot; W &quot;;</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                }else if(cell.getStoneColor()==2){</span>
+<span class="nc" id="L137">                    string = string + &quot; B &quot;;</span>
+                }
             }
+<span class="nc" id="L140">            System.out.println(string);</span>
         }
-<span class="nc" id="L128">        System.out.println(allCellsString.get(0) +&quot; - - &quot;+allCellsString.get(1)+&quot; - - &quot;+allCellsString.get(2));</span>
-<span class="nc" id="L129">        System.out.println(&quot;| &quot;+allCellsString.get(8)+&quot; - &quot;+allCellsString.get(9)+&quot; - &quot;+allCellsString.get(10)+ &quot; |&quot;);</span>
-<span class="nc" id="L130">        System.out.println(&quot;| | &quot;+allCellsString.get(16) + &quot; &quot; + allCellsString.get(17) + &quot; &quot; + allCellsString.get(18) + &quot; | |&quot;);</span>
-<span class="nc" id="L131">        System.out.println(allCellsString.get(3) +&quot; &quot; + allCellsString.get(11) + &quot; &quot; + allCellsString.get(19) + &quot;   &quot;+ allCellsString.get(20) + &quot; &quot; + allCellsString.get(12) + &quot; &quot; + allCellsString.get(4));</span>
-<span class="nc" id="L132">        System.out.println(&quot;| | &quot;+allCellsString.get(21) + &quot; &quot; + allCellsString.get(22) + &quot; &quot; + allCellsString.get(23) + &quot; | |&quot;);</span>
-<span class="nc" id="L133">        System.out.println(&quot;| &quot;+allCellsString.get(13)+&quot; - &quot;+allCellsString.get(14)+&quot; - &quot;+allCellsString.get(15)+ &quot; |&quot;);</span>
-<span class="nc" id="L134">        System.out.println(allCellsString.get(5) +&quot; - - &quot;+allCellsString.get(6)+&quot; - - &quot;+allCellsString.get(7));</span>
-<span class="nc" id="L135">    }</span>
+<span class="nc" id="L142">    }</span>
     
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
